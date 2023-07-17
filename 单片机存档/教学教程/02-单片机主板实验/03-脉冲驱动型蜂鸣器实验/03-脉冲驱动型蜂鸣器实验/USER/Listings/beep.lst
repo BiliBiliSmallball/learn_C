@@ -1,0 +1,39 @@
+C51 COMPILER V9.54   BEEP                                                                  06/07/2022 11:27:09 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE BEEP
+OBJECT MODULE PLACED IN .\Objects\beep.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\beep\beep.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWAR
+                    -E;..\SYSTEM;..\USER;..\HARDWARE\beep) DEBUG OBJECTEXTEND PRINT(.\Listings\beep.lst) TABS(2) OBJECT(.\Objects\beep.obj)
+
+line level    source
+
+   1          #include "beep.h"
+   2          
+   3          /**************************************************
+   4          函数名称：Beep_Configure
+   5          函数说明：蜂鸣器初始化配置函数  
+   6          输入参数：  无      
+   7          返 回 值：  无      
+   8          **************************************************/
+   9          void Beep_Configure(void)
+  10          {
+  11   1        P1_Mode_OUT_PP(0x04); //设置P1^2端口为推挽输出模式
+  12   1        BEEP(0);        //初始化蜂鸣器不鸣叫
+  13   1      }
+  14          
+  15          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      9    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,212 @@
+C51 COMPILER V9.54   PCFIIC                                                                06/07/2022 17:11:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE PCFIIC
+OBJECT MODULE PLACED IN .\Objects\pcfiic.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\PCF_IIC\pcfiic.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HA
+                    -RDWARE;..\SYSTEM;..\USER;..\HARDWARE\LCD12864;..\HARDWARE\PCF_IIC;..\HARDWARE\PCF8563) DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\pcfiic.lst) TABS(2) OBJECT(.\Objects\pcfiic.obj)
+
+line level    source
+
+   1          #include <system.h>
+   2          #include "pcfiic.h"
+   3          
+   4          /************************************************************
+   5          函数名称：PCF_IIC_Hardware_Init
+   6          功    能：IIC初始化
+   7          入口参数：无
+   8          返 回 值：无  
+   9          *************************************************************/
+  10          void PCF_IIC_Hardware_Init(void)
+  11          {              
+  12   1        P2_Mode_PullUp(IIC_SCL_PIN|IIC_SDA_PIN);
+  13   1       
+  14   1        PCF_IIC_SCL(1);
+  15   1        PCF_IIC_SDA(1);
+  16   1      
+  17   1      }
+  18          
+  19          /************************************************************
+  20          函数名称：PCF_SDA_In
+  21          功    能：设置SDA为输入模式
+  22          入口参数：无
+  23          返 回 值：无  
+  24          *************************************************************/
+  25          void PCF_SDA_In(void)
+  26          {
+  27   1          P2_Mode_HighZ(IIC_SDA_PIN);
+  28   1      }
+  29          
+  30          //设置SDA为输出模式
+  31          void PCF_SDA_Out(void)
+  32          {
+  33   1          P2_Mode_PullUp(IIC_SDA_PIN);
+  34   1      }
+  35          
+  36          /************************************************************
+  37          函数名称：PCF_IIC_Start
+  38          功    能：产生IIC起始信号
+  39          入口参数：无
+  40          返 回 值：无  
+  41          *************************************************************/
+  42          void PCF_IIC_Start(void)
+  43          {
+  44   1        PCF_SDA_Out();     //sda线输出
+  45   1        PCF_IIC_SDA(1);       
+  46   1        PCF_IIC_SCL(1);
+  47   1        Delay_us(4);
+  48   1        PCF_IIC_SDA(0);//START:when CLK is high,DATA change form high to low 
+  49   1        Delay_us(4);
+  50   1        PCF_IIC_SCL(0);//钳住I2C总线，准备发送或接收数据 
+  51   1      }  
+  52          
+  53          /************************************************************
+C51 COMPILER V9.54   PCFIIC                                                                06/07/2022 17:11:51 PAGE 2   
+
+  54          函数名称：PCF_IIC_Stop
+  55          功    能：产生IIC停止信号
+  56          入口参数：无
+  57          返 回 值：无  
+  58          *************************************************************/
+  59          void PCF_IIC_Stop(void)
+  60          {
+  61   1        PCF_SDA_Out();//sda线输出
+  62   1        PCF_IIC_SCL(0);
+  63   1        PCF_IIC_SDA(0);//STOP:when CLK is high DATA change form low to high
+  64   1        Delay_us(4);
+  65   1        PCF_IIC_SCL(1); 
+  66   1        PCF_IIC_SDA(1);//发送I2C总线结束信号
+  67   1        Delay_us(4);                  
+  68   1      }
+  69          
+  70          /************************************************************
+  71          函数名称：PCF_IIC_Wait_Ack
+  72          功    能：等待应答信号
+  73          入口参数：无
+  74          返 回 值：1，接收应答失败
+  75                    0，接收应答成功
+  76          *************************************************************/
+  77          uint8_t PCF_IIC_Wait_Ack(void)
+  78          {
+  79   1        uint8_t ucErrTime=0;
+  80   1        PCF_IIC_SDA(1);
+  81   1        PCF_SDA_In();      //SDA设置为输入  
+  82   1        
+  83   1        Delay_us(1);     
+  84   1        PCF_IIC_SCL(1);
+  85   1        Delay_us(1);   
+  86   1        while(PCF_READ_SDA)
+  87   1        {
+  88   2          ucErrTime++;
+  89   2          if(ucErrTime>250)
+  90   2          {
+  91   3            PCF_IIC_Stop();
+  92   3            return 1;
+  93   3          }
+  94   2        }
+  95   1        PCF_IIC_SCL(0);//时钟输出0     
+  96   1        return 0;  
+  97   1      } 
+  98          
+  99          /************************************************************
+ 100          函数名称：PCF_IIC_Ack
+ 101          功    能：产生ACK应答
+ 102          入口参数：无
+ 103          返 回 值：无
+ 104          *************************************************************/
+ 105          void PCF_IIC_Ack(void)
+ 106          {
+ 107   1        PCF_IIC_SCL(0);
+ 108   1        PCF_SDA_Out();
+ 109   1        PCF_IIC_SDA(0);
+ 110   1        Delay_us(2);
+ 111   1        PCF_IIC_SCL(1);
+ 112   1        Delay_us(2);
+ 113   1        PCF_IIC_SCL(0);
+ 114   1      }
+ 115          
+C51 COMPILER V9.54   PCFIIC                                                                06/07/2022 17:11:51 PAGE 3   
+
+ 116          /************************************************************
+ 117          函数名称：PCF_IIC_NAck
+ 118          功    能：不产生ACK应答 
+ 119          入口参数：无
+ 120          返 回 值：无
+ 121          *************************************************************/   
+ 122          void PCF_IIC_NAck(void)
+ 123          {
+ 124   1        PCF_IIC_SCL(0);
+ 125   1        PCF_SDA_Out();
+ 126   1        PCF_IIC_SDA(1);
+ 127   1        Delay_us(2);
+ 128   1        PCF_IIC_SCL(1);
+ 129   1        Delay_us(2);
+ 130   1        PCF_IIC_SCL(0);
+ 131   1      }   
+ 132          
+ 133          /************************************************************
+ 134          函数名称：PCF_IIC_Send_Byte
+ 135          功    能：IIC发送一个字节 返回从机有无应答
+ 136          入口参数：1，有应答 0，无应答   
+ 137          返 回 值：无
+ 138          *************************************************************/  
+ 139          void PCF_IIC_Send_Byte(uint8_t txd)
+ 140          {                        
+ 141   1          uint8_t t;   
+ 142   1        PCF_SDA_Out();      
+ 143   1          PCF_IIC_SCL(0);//拉低时钟开始数据传输
+ 144   1          for(t=0;t<8;t++)
+ 145   1          {              
+ 146   2              PCF_IIC_SDA(((txd&0x80)>>7));
+ 147   2              txd<<=1;    
+ 148   2          Delay_us(2);   //对TEA5767这三个延时都是必须的
+ 149   2          PCF_IIC_SCL(1);
+ 150   2          Delay_us(2); 
+ 151   2          PCF_IIC_SCL(0); 
+ 152   2          Delay_us(2);
+ 153   2          }  
+ 154   1      }
+ 155          
+ 156          /************************************************************
+ 157          函数名称：PCF_IIC_Read_Byte
+ 158          功    能：读1个字节
+ 159          入口参数：ack=1时，发送ACK，ack=0，发送nACK   
+ 160          返 回 值：无
+ 161          *************************************************************/  
+ 162          uint8_t PCF_IIC_Read_Byte(unsigned char ack)
+ 163          {
+ 164   1        unsigned char i,receive=0;
+ 165   1        PCF_SDA_In();//SDA设置为输入
+ 166   1          for(i=0;i<8;i++ )
+ 167   1        {
+ 168   2              PCF_IIC_SCL(0); 
+ 169   2              Delay_us(2);
+ 170   2          PCF_IIC_SCL(1);
+ 171   2              receive<<=1;
+ 172   2              if(PCF_READ_SDA)receive++;   
+ 173   2          Delay_us(1); 
+ 174   2          }          
+ 175   1          if (!ack)
+ 176   1              PCF_IIC_NAck();//发送nACK
+ 177   1          else
+C51 COMPILER V9.54   PCFIIC                                                                06/07/2022 17:11:51 PAGE 4   
+
+ 178   1              PCF_IIC_Ack(); //发送ACK   
+ 179   1          return receive;
+ 180   1      }
+ 181          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    366    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       6
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

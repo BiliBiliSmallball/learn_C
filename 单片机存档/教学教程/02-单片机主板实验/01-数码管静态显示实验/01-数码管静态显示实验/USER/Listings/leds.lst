@@ -1,0 +1,49 @@
+C51 COMPILER V9.54   LEDS                                                                  06/07/2022 10:23:14 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LEDS
+OBJECT MODULE PLACED IN .\Objects\leds.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\leds\leds.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWAR
+                    -E;..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\led;..\HARDWARE\leds) DEBUG OBJECTEXTEND PRINT(.\Listings\leds.lst) TABS
+                    -(2) OBJECT(.\Objects\leds.obj)
+
+line level    source
+
+   1          #include "leds.h"
+   2          
+   3          uint8_t code tab[] = {0xfc,0x60,0xda,0xf2,0x66,0xb6,0xbe,0xe0,
+   4                              0xfe,0xf6,0xee,0x3e,0x9c,0x7a,0x9e,0x8e};//0-F在数码管上显示的16进制数
+   5          
+   6          void LED_Init(void)
+   7          {
+   8   1        P1M1 = 0x00;
+   9   1        P1M0 = 0xff;
+  10   1      }
+  11          
+  12          void sendbyte(uint8_t byte)       //发送字节的程序
+  13          {     
+  14   1        uint8_t num,c;  
+  15   1        num = tab[byte];        //取段码
+  16   1        for(c = 0; c < 8; c++)    //发送8位段码
+  17   1        { 
+  18   2          CLK = 0; 
+  19   2          DAT = num&0x01;     //发送最低位数据
+  20   2          CLK = 1; 
+  21   2          num>>=1;        //数据右移一位
+  22   2               
+  23   2        } 
+  24   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     33    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

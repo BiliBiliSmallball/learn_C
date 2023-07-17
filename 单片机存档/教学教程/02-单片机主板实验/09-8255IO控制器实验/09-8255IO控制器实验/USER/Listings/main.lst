@@ -1,0 +1,76 @@
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 16:07:20 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\key;..\HARDWARE\led;..\HARDWARE\8255io) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Ob
+                    -jects\main.obj)
+
+line level    source
+
+   1          /**************************************************************************************
+   2          实验名称： 8255IO控制器实验
+   3          
+   4          硬件模块：  STC8A核心板-V2.1、主板区：8255IO控制、拨动开关、LED发光管
+   5          
+   6          硬件接线：  STC8A核心板   ----------    8255IO控制
+   7                     P2.0~P2.7    ----------    D0~D7(J38)  （可使用8P排线直接连接）
+   8                        P3~0      ----------         RD
+   9                        P3~1      ----------         WR
+  10                        P3~2      ----------         CS
+  11                        P3~3      ----------         A1 
+  12                        P3~4      ----------         A0      (可使用4P+1P排线直接连接)
+  13              
+  14                     8255IO控制   ----------     拨动开关
+  15                    PA0~PA7（J39）----------      SW1~SW7(J1)（可使用8P排线直接连接） 测试拨档开关
+  16                                           或->    K1~K7(J2) （可使用8P排线直接连接）  测试按键
+  17                     8255IO控制   ----------   LED发光管
+  18                    PB0~PB7（J40） ----------  LED1~LED7 （可使用8P排线直接连接） 测试PB组 IO口
+  19          
+  20                         
+  21                    
+  22                      
+  23          实验现象：  按下按键或拨档开关，对应LED灯点亮，
+  24                若发现相反LED灯点亮，请详细查看排线是否插反
+  25          
+  26          更新时间：   2019-07-26
+  27          *******************************************************************************************/
+  28          #include <intrins.h>
+  29          #include "system.h"
+  30          #include "led.h"
+  31          #include "key.h"
+  32          #include "8255io.h"
+  33          
+  34          void main(void)
+  35          {
+  36   1        
+  37   1        uint8_t key = 0;
+  38   1        System_Init();  //系统初始化
+  39   1        IO_8255_Init();
+  40   1        Write_8255(3,0X90);//配置 8255 PA为输入 PB PC 为输出
+  41   1        Delay_ms(10);
+  42   1        while(1)
+  43   1        {
+  44   2          Write_8255(1,Read_8255(0)); //读A写B
+  45   2      
+  46   2          Write_8255(2,Read_8255(0)); //读A写C
+  47   2        }
+  48   1      }
+  49          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     51    ----
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 16:07:20 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

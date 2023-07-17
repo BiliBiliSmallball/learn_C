@@ -1,0 +1,121 @@
+C51 COMPILER V9.54   MAIN                                                                  10/16/2019 16:01:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\key;..\HARDWARE\LCD12864;..\HARDWARE\93c46) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(
+                    -.\Objects\main.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：  93C46读写实验
+   3          
+   4          实验模块：  STC8A核心板v2.1
+   5          
+   6          实验接线：  P4上需要加上连接P3.2--INT0和P3.3--INT1的跳帽
+   7                STC8A核心板------液晶显示区（12864）
+   8                  P2.0---------CS1
+   9                  P2.1---------CS2
+  10                  P2.2---------RS
+  11                  P2.3---------RW
+  12                  P2.4---------RE      
+  13                      P0.0~P0.7---------DB0~DB8   
+  14                      STC8A核心板--------------EEPROM区
+  15                  P6.4-------------CS
+  16                  P6.5-------------CLK   
+  17                  P6.6-------------DI
+  18                  P6.7-------------DO    
+  19                      
+  20          现象描述：  程序在运行过程中首先检测是否有器件存在，如有期间存在则根据屏幕显示按下对应按键对93C46进行读或则
+             -写。
+  21                如无器件，屏幕会提示：93C46 ERROR!，这时候请检查接线，和元器件是否损害。
+  22                注：程序中使用的按键为核心板上的KEY0（写）、KEY1（读）。
+  23          
+  24          使用STC-ISP下载时请注意在【硬件选项】的第一项【输入用户程序运行是的IRC频率】
+  25          软件默认是11.0592MHz  但我们程序用的都是24MHz，所以我们需要手动输入或者下拉选择
+  26          24MHz然后再点击下载即可。然后即可看到右下方窗口提示
+  27            . 用户设定频率: 24.000MHz
+  28            . 调节后的频率: 24.000MHz
+  29            . 频率调节误差: 0.000%
+  30            
+  31          更新时间：2019-04-28
+  32          ***************************************************************************/
+  33          
+  34          #include <intrins.h>
+  35          #include "system.h"
+  36          #include "lcd12864.h"
+  37          #include "key.h"
+  38          #include "93C46.h"
+  39          
+  40          //要写入到93C46的字符串数组
+  41          const uint8_t TEXT_Buffer[]={" Hello world!"};//字符串可任意输入，最大不可超过127字节数据
+  42          #define SIZE sizeof(TEXT_Buffer)
+  43          
+  44          void main(void)
+  45          {
+  46   1        uint8_t key = 0;
+  47   1        uint8_t datatemp[SIZE];
+  48   1        System_Init();            //系统初始化
+  49   1        Key_Configure();          //按键初始化
+  50   1        AT93C46_Hardwarw_Init();          //初始化与93C46连接的硬件接口     
+  51   1          LCD12864_Software_Init();         //初始化12864液晶
+  52   1        while(1)
+C51 COMPILER V9.54   MAIN                                                                  10/16/2019 16:01:01 PAGE 2   
+
+  53   1        {
+  54   2          while(AT93C46_Check())//检测不到93C46
+  55   2              {
+  56   3                  ClearScreen(0);//清屏
+  57   3                  Show_Num(2,1,"93C46 ERROR!  ");
+  58   3                  Show_Num(2,2,"93C46 ERROR!  ");
+  59   3                  Delay_ms(500);
+  60   3                  Show_Num(0,1,"                ");
+  61   3                  Show_Num(0,2,"                ");
+  62   3                  Delay_ms(500);
+  63   3              }        
+  64   2              Show_Num(0,0,"K0:Write K1:Read");   //初始界面
+  65   2          //获取扫描键值
+  66   2          key = Key_Scan();
+  67   2          switch(key)
+  68   2          {
+  69   3            case KEY0_NUM:  
+  70   3              Show_Num(0,1,"StartWrite93C46");
+  71   3              AT93C46_Write(0,(uint8_t*)TEXT_Buffer,SIZE);
+  72   3              Show_Num(0,2,"Write Finished!");//提示传送完成
+  73   3              Show_Num(0,3,"                ");//显示读到的字符串
+  74   3              Delay_ms(500);
+  75   3              Delay_ms(500);
+  76   3              break;
+  77   3            case KEY1_NUM:   
+  78   3              Show_Num(0,1,"StartReadAT93C46");
+  79   3              AT93C46_Read(0,datatemp,SIZE);
+  80   3              Delay_ms(1);
+  81   3              Show_Num(0,2,"The Data Is:    ");//提示传送完成
+  82   3              Show_Num(0,3,(char*)datatemp);//显示读到的字符串
+  83   3              Delay_ms(500);
+  84   3              Delay_ms(500);
+  85   3              break;
+  86   3            default:  
+  87   3              break;
+  88   3          }
+  89   2          key=0;
+  90   2        }
+  91   1      }
+  92          
+  93          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    270    ----
+   CONSTANT SIZE    =    115    ----
+   XDATA SIZE       =     14      15
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

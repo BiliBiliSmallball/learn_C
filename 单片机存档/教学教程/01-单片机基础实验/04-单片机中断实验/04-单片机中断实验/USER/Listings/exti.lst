@@ -1,0 +1,73 @@
+C51 COMPILER V9.54   EXTI                                                                  06/07/2022 09:22:54 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE EXTI
+OBJECT MODULE PLACED IN .\Objects\exti.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\exti\exti.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWAR
+                    -E;..\SYSTEM;..\USER;..\HARDWARE\led;..\HARDWARE\exti) DEBUG OBJECTEXTEND PRINT(.\Listings\exti.lst) TABS(2) OBJECT(.\Obj
+                    -ects\exti.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "led.h"
+   3          #include "exti.h"
+   4          
+   5          /**************************************************
+   6          函数名称：Exti_Configure
+   7          函数说明：外部中断配置函数    
+   8          输入参数：  无      
+   9          返 回 值：  无      
+  10          **************************************************/
+  11          void Exti_Configure(void)
+  12          {
+  13   1        EX0 = 1;    //开启外部中断0  即P3.2
+  14   1        IT0 = 1;  //下降沿触发   IT0=0时 上升和下降都会触发 
+  15   1        EX1 = 1;    //开启外部中断1  即P3.3
+  16   1        IT1 = 1;  //下降沿触发   IT1=0时 上升和下降都会触发 
+  17   1        EA = 1;   //开启总中断
+  18   1      }
+  19          
+  20          /**************************************************
+  21          函数名称：Exti0_IRQHandler() interrupt INT0_VECTOR
+  22          函数说明：中断服务函数
+  23                INT0_VECTOR   外部中断0中断
+  24          输入参数：  无      
+  25          返 回 值：  无      
+  26          **************************************************/
+  27          void Exti0_IRQHandler() interrupt INT0_VECTOR
+  28          {
+  29   1        LED0_TOGGLE();
+  30   1        LED1_TOGGLE();
+  31   1      }
+  32          
+  33          /**************************************************
+  34          函数名称：Exti1_IRQHandler() interrupt INT1_VECTOR
+  35          函数说明：中断服务函数
+  36                INT1_VECTOR   外部中断1中断
+  37          输入参数：  无      
+  38          返 回 值：  无      
+  39          **************************************************/
+  40          void Exti1_IRQHandler() interrupt INT1_VECTOR
+  41          {
+  42   1        LED2_TOGGLE();
+  43   1        LED3_TOGGLE();
+  44   1      }
+  45          
+  46          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     21    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   EXTI                                                                  06/07/2022 09:22:54 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

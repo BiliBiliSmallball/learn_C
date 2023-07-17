@@ -1,0 +1,62 @@
+C51 COMPILER V9.54   74HC165                                                               06/07/2022 19:49:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE 74HC165
+OBJECT MODULE PLACED IN .\Objects\74hc165.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\74HC165\74hc165.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\74HC165) DEBUG OBJECTEXTEND PRINT(.\Listings\74hc165.lst) TABS(2) OBJECT(.\Objects
+                    -\74hc165.obj)
+
+line level    source
+
+   1          #include "74hc165.h"
+   2          
+   3          /***********************************************
+   4          函数名称：GPIO_Init
+   5          功    能：IO口初始化
+   6          入口参数：无
+   7          返 回 值：无          
+   8          ************************************************/
+   9          void GPIO_Init(void)
+  10          {
+  11   1        P0M1 = 0x00;
+  12   1        P0M0 = 0xff;
+  13   1        
+  14   1        P1M1 = 0x02;
+  15   1        P1M0 = 0xfd;
+  16   1      }
+  17          
+  18          /***********************************************
+  19          函数名称：receive
+  20          功    能：数据接收函数
+  21          入口参数：无
+  22          返 回 值：接收数据          
+  23          ************************************************/
+  24          uint8_t receive(void)     
+  25          {     
+  26   1        uint8_t byte = 0,c;  
+  27   1        for(c = 0; c < 8; c++)    
+  28   1        { 
+  29   2          byte = byte<<1;     //数据左移一位
+  30   2          CLK = 1;
+  31   2          CLK = 0;
+  32   2          if(SDA)         //收取最低位数据
+  33   2          byte = byte|0x01;     
+  34   2          CLK = 1;    
+  35   2        } 
+  36   1        return(byte);
+  37   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     38    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

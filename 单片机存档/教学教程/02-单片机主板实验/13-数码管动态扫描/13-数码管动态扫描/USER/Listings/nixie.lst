@@ -1,0 +1,35 @@
+C51 COMPILER V9.54   NIXIE                                                                 06/07/2022 17:48:47 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE NIXIE
+OBJECT MODULE PLACED IN .\Objects\nixie.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\Nixie\nixie.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDW
+                    -ARE;..\SYSTEM;..\USER;..\HARDWARE\Nixie) DEBUG OBJECTEXTEND PRINT(.\Listings\nixie.lst) TABS(2) OBJECT(.\Objects\nixie.o
+                    -bj)
+
+line level    source
+
+   1          #include "nixie.h"
+   2          
+   3          void Nixie_Init(void)
+   4          {
+   5   1        P0M1 = 0x00;
+   6   1        P0M0 = 0xff;
+   7   1        
+   8   1        P1M1 = 0x00;
+   9   1        P1M0 = 0xff;
+  10   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     12    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

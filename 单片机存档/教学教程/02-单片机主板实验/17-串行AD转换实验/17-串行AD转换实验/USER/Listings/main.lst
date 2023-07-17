@@ -1,0 +1,59 @@
+C51 COMPILER V9.54   MAIN                                                                  06/08/2022 10:03:08 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\ADC;..\HARDWARE\LCD12864) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj
+                    -)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：
+   3          
+   4          实验模块：  STC8A核心板-V2.1、
+   5          
+   6          实验接线：    STC8A核心板   -----------                
+   7                      
+   8          现象描述：
+   9          
+  10          更新时间：2022.06.07
+  11          ***************************************************************************/
+  12          #include "intrins.h"
+  13          #include "system.h"
+  14          #include "lcd12864.h"
+  15          #include "adc.h"
+  16          #include "stdio.h"
+  17          
+  18          void main(void)
+  19          {
+  20   1        float vol = 0;
+  21   1        char show[17]={0};
+  22   1        System_Init();       //系统初始化
+  23   1        ADC_Init();
+  24   1        LCD12864_Software_Init();           //液晶初始化
+  25   1        
+  26   1        while(1)
+  27   1        {
+  28   2          vol=read()*5/255;//读取转换数据 
+  29   2          sprintf(show,"   Vol: %3.1fV  ",vol);
+  30   2          Show_Num(0,4,show);
+  31   2          Delay_ms(500);
+  32   2        }
+  33   1      }
+  34          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    139    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----      21
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,128 @@
+C51 COMPILER V9.54   MAIN                                                                  06/08/2022 15:56:10 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\LCD12864;..\HARDWARE\DS18B20) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main
+                    -.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：  DS18B20温度读取实验
+   3          
+   4          实验模块：  STC8A核心板v2.1、主板区：12864图形液晶
+   5          
+   6          实验接线：  STC8A核心板   ---------   液晶显示区（12864）
+   7                        P2.0      ---------      CS1
+   8                        P2.1      ---------      CS2
+   9                        P2.2      ---------      RS
+  10                        P2.3      ---------      RW
+  11                        P2.4      ---------      RE
+  12                      P0.0~P0.7   ---------      DB0~DB8
+  13          
+  14                    STC8A核心板   ---------   温度传感器
+  15                        P2.7      ---------     1WIRE
+  16          
+  17          现象描述：  程序在运行过程中首先检测是否有器件存在，如有期间存在则显示温度
+  18          
+  19          使用STC-ISP下载时请注意在【硬件选项】的第一项【输入用户程序运行是的IRC频率】
+  20          软件默认是11.0592MHz  但我们程序用的都是24MHz，所以我们需要手动输入或者下拉选择
+  21          24MHz然后再点击下载即可。然后即可看到右下方窗口提示
+  22            . 用户设定频率: 24.000MHz
+  23            . 调节后的频率: 24.000MHz
+  24            . 频率调节误差: 0.000%
+  25          
+  26          更新时间：2018.9.14
+  27          ***************************************************************************/
+  28          
+  29          #include <intrins.h>
+  30          #include "system.h"
+  31          #include "lcd12864.h"
+  32          #include "DS18B20.h"
+  33          #include "stdio.h"
+  34          
+  35          extern unsigned char DS18B20_SensorNum;
+  36          uint8_t Disbuf[6] = {"     "};
+  37          char ID[10] = {0};
+  38          
+  39          void main(void)
+  40          {
+  41   1          float temp = 0;
+  42   1          uint16_t  temper;
+  43   1          uint8_t i = 0;
+  44   1      
+  45   1          System_Init();            //系统初始化
+  46   1          LCD12864_Software_Init();         //初始化12864液晶
+  47   1          DS18B20_Init();
+  48   1      
+  49   1          while(1)
+  50   1          {
+  51   2              DS18B20_Search_Rom();
+  52   2      
+  53   2              if(DS18B20_SensorNum)
+C51 COMPILER V9.54   MAIN                                                                  06/08/2022 15:56:10 PAGE 2   
+
+  54   2              {
+  55   3                  Show_Num(2, 0, " DS18B20 OK  ");
+  56   3                  Show_Num(0, 1, "Num : ");  //显示数量
+  57   3      
+  58   3                  if(DS18B20_SensorNum == 1)
+  59   3                  {
+  60   4                      Show_Num(6, 1, "1");            //显示数量
+  61   4                  }
+  62   3                  else if(DS18B20_SensorNum == 2)
+  63   3                  {
+  64   4                      Show_Num(6, 1, "2");            //显示数量
+  65   4                  }
+  66   3      
+  67   3                  for(i = 0; i < 2; i++)
+  68   3                  {
+  69   4                      Show_Num(0, 2, "temp1:");
+  70   4                      Show_Num(0, 3, "temp2:");
+  71   4                      Show_Hz(6, 2, 9);
+  72   4                      Show_Hz(6, 3, 9);
+  73   4                      temp = DS18B20_Get_Temp(i);//获取温度
+  74   4                      temper = temp * 100;
+  75   4                      Disbuf[0] = temper / 1000 % 10 + 0x30;
+  76   4                      Disbuf[1] = temper / 100 % 10 + 0x30;
+  77   4                      Disbuf[2] = '.';
+  78   4                      Disbuf[3] = temper / 10 % 10 + 0x30;
+  79   4                      Disbuf[4] = temper % 10 + 0x30;
+  80   4                      Show_Num(6, 2 + i, (char*)Disbuf); //显示温度
+  81   4      
+  82   4                      if(DS18B20_SensorNum < 2)
+  83   4                      {
+  84   5                          Show_Num(6, 3, "      ");
+  85   5                          break;
+  86   5                      }
+  87   4                  }
+  88   3              }
+  89   2              else
+  90   2              {
+  91   3      
+  92   3                  ClearScreen(0);
+  93   3                  Delay_ms(500);
+  94   3                  Show_Num(2, 0, "DS18B20 ERROR");
+  95   3              }
+  96   2      
+  97   2              Delay_ms(500);
+  98   2          }
+  99   1      }
+ 100          
+ 101          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    369    ----
+   CONSTANT SIZE    =     60    ----
+   XDATA SIZE       =     16       5
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

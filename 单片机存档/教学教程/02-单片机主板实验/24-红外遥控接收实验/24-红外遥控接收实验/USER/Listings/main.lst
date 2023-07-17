@@ -1,0 +1,108 @@
+C51 COMPILER V9.54   MAIN                                                                  06/08/2022 14:19:14 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\key;..\HARDWARE\LCD12864;..\HARDWARE\infrared;..\HARDWARE\exti;..\HARDWARE\pwm) DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*************************************************************************************
+   2          实验名称： 红外收发实验
+   3          
+   4          硬件模块：  STC8A核心板v2.1、主板区： 12864图形液晶、红外传输
+   5          
+   6          硬件接线：  注：STC8A核心板P4上需要加上连接P3.2--INT0的跳帽   
+   7          
+   8                    STC8A核心板   -------------   12864图形液晶
+   9                        P2.0      -------------       CS1
+  10                        P2.1      -------------       CS2
+  11                        P2.2      -------------       RS
+  12                        P2.3      -------------       RW
+  13                        P2.4      -------------       RE
+  14                   P0.0~P0.7      -------------       DB0~DB7
+  15                   
+  16                    STC8A核心板   -------------   红外传输
+  17                        P1.1      -------------     TXD
+  18                        P2.7      -------------     RXD     
+  19                      
+  20          实验现象：本实验需要两个实验箱，按上述接线分别接好每个实验箱上的接线，将程序分别下载到两个实验箱核心板上，
+  21                    将两个试验箱上的红外发射区相对，按下发射端核心板上的INT0按键发送数据液晶显示屏上显示红外发送OK，
+  22                    接收端液晶显示屏上显示接收到的红外数据。
+  23          
+  24                    使用STC-ISP下载时请注意在【硬件选项】的第一项【输入用户程序运行是的IRC频率】
+  25                    软件默认是11.0592MHz  但我们程序用的都是24MHz，所以我们需要手动输入或者下拉选择
+  26                    24MHz然后再点击下载即可。然后即可看到右下方窗口提示
+  27                    . 用户设定频率: 24.000MHz
+  28                    . 调节后的频率: 24.000MHz
+  29                    . 频率调节误差: 0.000%
+  30            
+  31          更新时间：   2022-06-08
+  32          ****************************************************************************************/
+  33          #include <intrins.h>
+  34          #include "system.h"
+  35          #include "lcd12864.h"
+  36          #include "infrared.h"
+  37          #include "key.h"
+  38          #include "pwm.h"
+  39          
+  40          char ir_senddata[9]={"12345678"};
+  41          char ir_recvdata[9]={"        "};
+  42          
+  43          void main(void)
+  44          {
+  45   1        uint8_t key_value = 0,i = 0;
+  46   1        System_Init();            //系统初始化
+  47   1        Infrared_Hardware_Init();           //红外初始化
+  48   1          LCD12864_Software_Init();           //液晶初始化
+  49   1          Show_Num(1,0,"infrared test");
+  50   1          while(1)
+  51   1        {
+  52   2          if(!KEY0)           //按键发送
+  53   2          {
+C51 COMPILER V9.54   MAIN                                                                  06/08/2022 14:19:14 PAGE 2   
+
+  54   3            Infrared_SendDate( ir_senddata,8 ); //红外发送八个字节数据
+  55   3            Show_Num(0,1,"infrared send OK");
+  56   3            Show_Num(0,3,"data:");
+  57   3            Show_Num(8,3,ir_senddata);
+  58   3            while(!KEY0);           //松开按键后清屏
+  59   3            Show_Num(0,1,"                ");
+  60   3            Show_Num(0,3,"                ");
+  61   3          }
+  62   2          if(!READ_RX())          //检测到接收
+  63   2          {
+  64   3            if(IR_RC_Time()==1)     //是信息头
+  65   3            {
+  66   4              for(i=0;i<8;i++)    //接收八个字节
+  67   4              {
+  68   5                ir_recvdata[i] = Infrared_RecvByte();
+  69   5              }
+  70   4              Show_Num(0,2,"receive: OK");
+  71   4              Show_Num(0,3,"data:");
+  72   4              Show_Num(8,3,ir_recvdata);
+  73   4              Delay_ms(500);          //等待500ms后清屏
+  74   4              Show_Num(0,2,"                ");
+  75   4              Show_Num(0,3,"                ");
+  76   4            }
+  77   3          }
+  78   2        }
+  79   1      }
+  80          
+  81          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    230    ----
+   CONSTANT SIZE    =     66    ----
+   XDATA SIZE       =     18       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

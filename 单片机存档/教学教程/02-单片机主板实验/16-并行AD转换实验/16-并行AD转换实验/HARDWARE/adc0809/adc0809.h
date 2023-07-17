@@ -1,0 +1,49 @@
+#ifndef __ADC0809_H_
+#define __ADC0809_H_
+
+#include "system.h"
+
+#define GPIO_ADC0809_CMD	P6
+#define GPIO_ADC0809_DAT	P7
+
+#define PIN_ADC0809_START 	PIN_0
+#define PIN_ADC0809_EOC 	PIN_1
+#define PIN_ADC0809_OE	 	PIN_2
+#define PIN_ADC0809_A_ 		PIN_4
+#define PIN_ADC0809_B_ 		PIN_5
+#define PIN_ADC0809_C_ 		PIN_6
+#define PIN_ADC0809_ALE 	PIN_7
+
+#define _A_( x )		x?SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_A_):ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_A_)
+#define _B_( x )		x?SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_B_):ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_B_)
+#define _C_( x )		x?SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_C_):ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_C_)
+
+#define ADC0809_ALE_SET		SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_ALE)
+#define ADC0809_START_SET	SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_START)
+#define ADC0809_OE_SET		SetBits(GPIO_ADC0809_CMD,PIN_ADC0809_OE)
+
+#define ADC0809_ALE_CLR		ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_ALE)
+#define ADC0809_START_CLR	ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_START)
+#define ADC0809_OE_CLR		ClrBits(GPIO_ADC0809_CMD,PIN_ADC0809_OE)
+
+#define ADC0809_EOC_READ	P61
+#define ADC0809_DATA_READ	P7
+
+#define IN0 1		
+#define IN1 1<<1
+#define IN2 1<<2
+#define IN3 1<<3
+#define IN4 1<<4
+#define IN5 1<<5
+#define IN6 1<<6
+#define IN7 1<<7
+
+//ADC0809硬件初始化
+void ADC0809_Hardware_Init(void);
+//ADC0809模数转化函数
+uint8_t ADC0809_Convert(uint8_t chl);
+
+#endif 
+
+
+

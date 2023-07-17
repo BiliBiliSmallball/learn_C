@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\System.obj",
+".\Objects\lcd12864.obj",
+".\Objects\pcfiic.obj",
+".\Objects\pcf8563.obj" 
+TO ".\Objects\TEST" 
+PRINT(".\Listings\TEST.m51") RAMSIZE(256) 

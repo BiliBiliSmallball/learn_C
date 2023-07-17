@@ -1,0 +1,73 @@
+C51 COMPILER V9.54   KEY                                                                   10/16/2019 16:01:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\key\key.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;
+                    -..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\LCD12864;..\HARDWARE\93c46) DEBUG OBJECTEXTEND PRINT(.\Listings\key.lst) T
+                    -ABS(2) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "key.h"
+   3          
+   4          /**************************************************
+   5          函数名称：Key_Configure
+   6          函数说明：按键初始化配置函数  
+   7          输入参数：  无      
+   8          返 回 值：  无      
+   9          **************************************************/
+  10          void Key_Configure(void)
+  11          {
+  12   1        P3_Mode_HighZ( KEY0_PIN | KEY1_PIN );
+  13   1      }
+  14          
+  15          /**************************************************
+  16          函数名称：Key_Scan
+  17          函数说明：按键扫描函数  
+  18          输入参数：  无      
+  19          返 回 值：  KEY0_NUM(1)   扫描到按键KEY0按下
+  20                KEY1_NUM(2)   扫描到按键KEY1按下
+  21          **************************************************/
+  22          uint8_t Key_Scan()
+  23          { 
+  24   1        uint8_t key_value = 1;
+  25   1        //判断按键是否按下
+  26   1        if( !(KEY0 & KEY1) )        
+  27   1        { 
+  28   2          //软件消抖  抖动时间的长短由按键的机械特性决定，一般为5ms～10ms
+  29   2          Delay_ms(10); 
+  30   2          //再次判断按键是否按下
+  31   2          if( !(KEY0 & KEY1) )      
+  32   2          { 
+  33   3            //读取按键0，如果按下即为低电平，所以要取反
+  34   3              if( ! KEY0  )
+  35   3                key_value = KEY0_NUM; 
+  36   3              //读取按键1，如果按下即为低电平，所以要取反
+  37   3              else if( ! KEY1  )
+  38   3                key_value = KEY1_NUM; 
+  39   3          }
+  40   2          //返回按键值
+  41   2          return key_value;
+  42   2        }
+  43   1        return 0;
+  44   1      }
+  45          
+  46          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     61    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   KEY                                                                   10/16/2019 16:01:01 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

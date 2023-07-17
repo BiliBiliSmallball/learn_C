@@ -1,0 +1,58 @@
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 09:22:54 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\led;..\HARDWARE\exti) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：  外部中断实验
+   3          
+   4          实验模块：  STC8A核心板-V2.1
+   5          
+   6          实验接线：  P4上需要加上连接P3.2--INT0和P3.3--INT1的跳帽
+   7                                                                
+   8          现象描述：  按下按键INT0和INT1触发外部中断，有下降沿变化时，指示灯会发生相应的翻转。
+   9          
+  10          使用STC-ISP下载时请注意在【硬件选项】的第一项【输入用户程序运行是的IRC频率】
+  11          软件默认是11.0592MHz  但我们程序用的都是24MHz，所以我们需要手动输入或者下拉选择
+  12          24MHz然后再点击下载即可。然后即可看到右下方窗口提示
+  13            . 用户设定频率: 24.000MHz
+  14            . 调节后的频率: 24.000MHz
+  15            . 频率调节误差: 0.000%
+  16            
+  17          更新时间：2018.9.14
+  18          ***************************************************************************/
+  19          
+  20          #include <intrins.h>
+  21          #include "system.h"
+  22          #include "led.h"
+  23          #include "exti.h"
+  24          
+  25          void main(void)
+  26          {
+  27   1        System_Init();      //系统初始化
+  28   1        Led_Configure();    //LED初始化
+  29   1        Exti_Configure();   //外部中断初始化
+  30   1        while(1)
+  31   1        {
+  32   2                    
+  33   2        }
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     11    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

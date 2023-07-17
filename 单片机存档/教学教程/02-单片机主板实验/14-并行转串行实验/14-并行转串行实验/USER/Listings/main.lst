@@ -1,0 +1,66 @@
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 19:49:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\74HC165) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：并行转串行实验
+   3          
+   4          实验模块：  STC8A核心板-V2.1、主板：并行转串行、拨动开关、LED发光管
+   5          
+   6          实验接线：  STC8A核心板   -----------   LED发光管
+   7                     P0.0~P0.7    -----------  LED1~LED8(J4) 
+   8                     
+   9                    STC8A核心板   -----------   并行转串行(J7)
+  10                       P1.0       -----------      CLK
+  11                       P1.1       -----------      SDA
+  12                       P1.2       -----------      SF/LD
+  13                       
+  14                    并行转串行    -----------    LED发光管
+  15                      1~8(J8)     -----------    SW1~SW8(J1)
+  16                      
+  17          现象描述：拨动开关SW1~SW8控制LED1~LED8的亮灭
+  18          
+  19          更新时间：2022.06.07
+  20          ***************************************************************************/
+  21          #include "intrins.h"
+  22          #include "system.h"
+  23          #include "74hc165.h"
+  24          
+  25          
+  26          void main(void)
+  27          {
+  28   1        uint8_t a = 0;
+  29   1        System_Init();       //系统初始化
+  30   1        GPIO_Init();
+  31   1        
+  32   1        while(1)
+  33   1        {
+  34   2          SF = 1;           //锁入数据
+  35   2          SF = 0;
+  36   2          SF = 1;
+  37   2          a = receive();
+  38   2          P0 = a;
+  39   2        }
+  40   1      }
+  41          
+  42          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     29    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
