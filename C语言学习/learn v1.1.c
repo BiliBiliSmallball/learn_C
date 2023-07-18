@@ -22,7 +22,9 @@ void _define(){
 // 3.指针指向 void
 // 长短
 // 长型（long），短型(short)
-// 特殊的关键词： unsigned（平常没区别，到转换的时候就要注意了）
+// 特殊的关键词： unsigned
+// 不管什么类型，前面加unsigned就没有负数形式。
+// 以及，在没有insigned的情况下，一个变量的第一比特位是符号位
 
 
 // enum:枚举类型
