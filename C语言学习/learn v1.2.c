@@ -9,7 +9,7 @@
 #include<stdio.h>
 #include<math.h>
 void _Sizeof(){
-    int a = a;//这有问题 
+    char a = 'A';//定义一个char类型的变量a
     printf("a的类型是%d",sizeof(a));
 }
 
@@ -32,6 +32,6 @@ int main(){
     _Sizeof();
     cf();
     str();
-    system("pauser");
+    system("pause"); 
     return 0;
 }

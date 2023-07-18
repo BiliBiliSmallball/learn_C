@@ -27,6 +27,7 @@ int main()//主函数
 	printf("我有 %f 元\n",be);//格式化输出
 	printf("你干嘛！~ 哎呦~\n");//调用printf函数输出
 	less1();//调用函数（跟py一样）
+	system("pause");//冻结窗口 
 	return 0;
 }
 /*

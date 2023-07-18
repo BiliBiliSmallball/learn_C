@@ -62,6 +62,7 @@ int main(){
     _define();//常量
     Date_signed();//数据类型
     Get_Day();//枚举类型说明
+    system("pause");
     return 0;
 }
 
