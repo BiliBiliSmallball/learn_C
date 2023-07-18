@@ -7,9 +7,9 @@
 //一定要跟printf一起用
 
 #include<stdio.h>
-
+#include<math.h>
 void _Sizeof(){
-    char a = "我是一串字符";
+    int a = a;//这有问题 
     printf("a的类型是%d",sizeof(a));
 }
 
@@ -20,13 +20,18 @@ void cf(){
     //return 0;  															你函数写void(无返回值你return啥？) 
 }
 
-//字符串
-char a [] ={"我","shi","字"};
+//字符
+//本质上就是利用ASCII码进行交代的东西
+void str(){
+	char a = 'C';
+	printf("%c = %d\n",a,a);
+} 
 
 //看结果
 int main(){
     _Sizeof();
     cf();
-    printf("%s\n",a);
+    str();
+    system("pauser");
     return 0;
 }
