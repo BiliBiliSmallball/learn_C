@@ -13,3 +13,4 @@
 int main(){
     printf("%s",longger)//这里我没有在函数里面定义longger，但是因为前面全局已经写了
 }
+cascas
