@@ -33,8 +33,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/C语言",
-      "program": "d:/C语言/build/Debug/outDebug",
+      "cwd": "d:/C语言/单片机存档/教学教程/01-单片机基础实验/03-单片机定时器实验/03-单片机定时器实验/USER/Listings",
+      "program": "d:/C语言/单片机存档/教学教程/01-单片机基础实验/03-单片机定时器实验/03-单片机定时器实验/USER/Listings/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

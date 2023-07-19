@@ -1,0 +1,61 @@
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 11:27:08 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\beep) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：脉冲驱动型蜂鸣器实验
+   3          
+   4          实验模块：  STC8A核心板-V2.1、主板区 BUZZER-pulse蜂鸣器
+   5          
+   6          实验接线：    STC8A核心板   -----------   BUZZER-pulse蜂鸣器
+   7                         P1.2       -----------        PUL        
+   8                                             
+   9                      
+  10          现象描述：  蜂鸣器间断性鸣响
+  11          
+  12          更新时间：2022.06.07
+  13          ***************************************************************************/
+  14          #include "intrins.h"
+  15          #include "system.h"
+  16          #include "beep.h"
+  17          
+  18          
+  19          void main(void)
+  20          {
+  21   1        uint16_t i = 0;
+  22   1        System_Init();       //系统初始化
+  23   1        Beep_Configure();       //蜂鸣器初始化
+  24   1        while(1)
+  25   1        {
+  26   2          for(i=0;i<250;i++)
+  27   2          {
+  28   3          BEEP(1);          //鸣叫蜂鸣器
+  29   3          Delay_ms(1);        //延时
+  30   3          BEEP(0);          //停止鸣叫蜂鸣器
+  31   3          Delay_ms(1);        //延时
+  32   3          }       
+  33   2          Delay_ms(500);        //延时    
+  34   2        }
+  35   1      }
+  36          
+  37          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     76    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

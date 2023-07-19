@@ -1,0 +1,43 @@
+C51 COMPILER V9.54   LED                                                                   06/07/2022 10:10:50 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\led.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\led\led.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;
+                    -..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\led;..\HARDWARE\leds) DEBUG OBJECTEXTEND PRINT(.\Listings\led.lst) TABS(2)
+                    - OBJECT(.\Objects\led.obj)
+
+line level    source
+
+   1          #include "led.h"
+   2          
+   3          /**************************************************
+   4          函数名称：Led_Configure
+   5          函数说明：LED初始化配置函数 
+   6          输入参数：  无      
+   7          返 回 值：  无      
+   8          **************************************************/
+   9          void Led_Configure(void)
+  10          {
+  11   1        P4_Mode_OUT_PP(0x0f); //设置P4端口为推挽输出模式
+  12   1        LED0(0);        //初始化默认熄灭灯
+  13   1        LED1(0);        //初始化默认熄灭灯
+  14   1        LED2(0);        //初始化默认熄灭灯
+  15   1        LED3(0);        //初始化默认熄灭灯
+  16   1      }
+  17          
+  18          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     15    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

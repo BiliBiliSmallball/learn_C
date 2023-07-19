@@ -1,0 +1,373 @@
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\Objects\ds18b20.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\DS18B20\ds18b20.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\LCD12864;..\HARDWARE\DS18B20) DEBUG OBJECTEXTEND PRINT(.\Listings\ds18b20.lst) TAB
+                    -S(2) OBJECT(.\Objects\ds18b20.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "ds18b20.h"
+   3          #include "stdio.h"
+   4          
+   5          #define DS18B20_GPIO_NUM        PIN_7
+   6          #define DS18B20_GPIO_X          P2
+   7          
+   8          #define DS18B20_DQ_OUT_Low      ClrBits(DS18B20_GPIO_X,DS18B20_GPIO_NUM)
+   9          #define DS18B20_DQ_OUT_High     SetBits(DS18B20_GPIO_X,DS18B20_GPIO_NUM)
+  10          #define DS18B20_DQ_IN       P27
+  11          
+  12          #define MaxSensorNum 8
+  13          
+  14          #define ROMID DS18B20_ID
+  15          
+  16          unsigned char DS18B20_ID[MaxSensorNum][8];
+  17          unsigned char DS18B20_SensorNum = 0;
+  18          
+  19          void DS18B20_GPIO_Config(void)
+  20          {
+  21   1          DS18B20_Mode_Out();
+  22   1          DS18B20_DQ_OUT_High;
+  23   1      }
+  24          
+  25          void DS18B20_Mode_IPU(void)
+  26          {
+  27   1          P2_Mode_HighZ(DS18B20_GPIO_NUM);
+  28   1      }
+  29          
+  30          void DS18B20_Mode_Out(void)
+  31          {
+  32   1          P2_Mode_PullUp(DS18B20_GPIO_NUM);
+  33   1      }
+  34          
+  35          void DS18B20_Rst(void)
+  36          {
+  37   1          DS18B20_Mode_Out();
+  38   1          DS18B20_DQ_OUT_Low;
+  39   1          Delay_us(480);
+  40   1          DS18B20_DQ_OUT_High;
+  41   1          Delay_us(15);
+  42   1      }
+  43          
+  44          uint8_t DS18B20_Answer_Check(void)
+  45          {
+  46   1          uint8_t delay = 0;
+  47   1          DS18B20_Mode_IPU();
+  48   1      
+  49   1          while (DS18B20_DQ_IN && delay < 100)
+  50   1          {
+  51   2              delay++;
+  52   2              Delay_us(1);
+  53   2          }
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 2   
+
+  54   1      
+  55   1          if (delay >= 100)
+  56   1              return 1;
+  57   1          else
+  58   1              delay = 0;
+  59   1      
+  60   1          while (!DS18B20_DQ_IN && delay < 240)
+  61   1          {
+  62   2              delay++;
+  63   2              Delay_us(1);
+  64   2          }
+  65   1      
+  66   1          if (delay >= 240)
+  67   1              return 1;
+  68   1      
+  69   1          return 0;
+  70   1      }
+  71          
+  72          
+  73          uint8_t DS18B20_Read_Bit(void)
+  74          {
+  75   1          uint8_t wdata;
+  76   1          DS18B20_Mode_Out();
+  77   1          DS18B20_DQ_OUT_Low;
+  78   1          Delay_us(2);
+  79   1          DS18B20_DQ_OUT_High;
+  80   1          Delay_us(12);
+  81   1          DS18B20_Mode_IPU();
+  82   1      
+  83   1          if (DS18B20_DQ_IN)
+  84   1              wdata = 1;
+  85   1          else
+  86   1              wdata = 0;
+  87   1      
+  88   1          Delay_us(50);
+  89   1          return wdata;
+  90   1      }
+  91          
+  92          
+  93          uint8_t DS18B20_Read_2Bit(void)
+  94          {
+  95   1          uint8_t i;
+  96   1          uint8_t dat = 0;
+  97   1      
+  98   1          for (i = 2; i > 0; i--)
+  99   1          {
+ 100   2              dat = dat << 1;
+ 101   2              DS18B20_Mode_Out();
+ 102   2              DS18B20_DQ_OUT_Low;
+ 103   2              Delay_us(2);
+ 104   2              DS18B20_DQ_OUT_High;
+ 105   2              DS18B20_Mode_IPU();
+ 106   2              Delay_us(12);
+ 107   2      
+ 108   2              if (DS18B20_DQ_IN)  dat |= 0x01;
+ 109   2      
+ 110   2              Delay_us(50);
+ 111   2          }
+ 112   1      
+ 113   1          return dat;
+ 114   1      }
+ 115          
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 3   
+
+ 116          
+ 117          uint8_t DS18B20_Read_Byte(void) // read one byte
+ 118          {
+ 119   1          uint8_t i, j, dat;
+ 120   1          dat = 0;
+ 121   1      
+ 122   1          for (i = 0; i < 8; i++)
+ 123   1          {
+ 124   2              j = DS18B20_Read_Bit();
+ 125   2              dat = (dat) | (j << i);
+ 126   2          }
+ 127   1      
+ 128   1          return dat;
+ 129   1      }
+ 130          
+ 131          
+ 132          void DS18B20_Write_Bit(uint8_t dat)
+ 133          {
+ 134   1          DS18B20_Mode_Out();
+ 135   1      
+ 136   1          if (dat)
+ 137   1          {
+ 138   2              DS18B20_DQ_OUT_Low;// Write 1
+ 139   2              Delay_us(2);
+ 140   2              DS18B20_DQ_OUT_High;
+ 141   2              Delay_us(60);
+ 142   2          }
+ 143   1          else
+ 144   1          {
+ 145   2              DS18B20_DQ_OUT_Low;// Write 0
+ 146   2              Delay_us(60);
+ 147   2              DS18B20_DQ_OUT_High;
+ 148   2              Delay_us(2);
+ 149   2          }
+ 150   1      }
+ 151          
+ 152          
+ 153          void DS18B20_Write_Byte(uint8_t dat)
+ 154          {
+ 155   1          uint8_t j;
+ 156   1          uint8_t testb;
+ 157   1          DS18B20_Mode_Out();
+ 158   1      
+ 159   1          for (j = 1; j <= 8; j++)
+ 160   1          {
+ 161   2              testb = dat & 0x01;
+ 162   2              dat = dat >> 1;
+ 163   2      
+ 164   2              if (testb)
+ 165   2              {
+ 166   3                  DS18B20_DQ_OUT_Low;
+ 167   3                  Delay_us(10);
+ 168   3                  DS18B20_DQ_OUT_High;
+ 169   3                  Delay_us(50);
+ 170   3              }
+ 171   2              else
+ 172   2              {
+ 173   3                  DS18B20_DQ_OUT_Low;
+ 174   3                  Delay_us(60);
+ 175   3                  DS18B20_DQ_OUT_High;
+ 176   3                  Delay_us(2);
+ 177   3              }
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 4   
+
+ 178   2          }
+ 179   1      }
+ 180          
+ 181          
+ 182          uint8_t DS18B20_Init(void)
+ 183          {
+ 184   1          DS18B20_GPIO_Config();
+ 185   1          DS18B20_Rst();
+ 186   1          return DS18B20_Answer_Check();
+ 187   1      }
+ 188          
+ 189          
+ 190          float DS18B20_Get_Temp(uint8_t i)
+ 191          {
+ 192   1      
+ 193   1          uint8_t j;
+ 194   1          uint8_t TL, TH;
+ 195   1          short Temperature;
+ 196   1          float Temperature1;
+ 197   1          DS18B20_Rst();
+ 198   1          DS18B20_Answer_Check();
+ 199   1          DS18B20_Write_Byte(0xcc);// skip rom
+ 200   1          DS18B20_Write_Byte(0x44);// convert
+ 201   1          DS18B20_Rst();
+ 202   1          DS18B20_Answer_Check();
+ 203   1      
+ 204   1          // DS18B20_Write_Byte(0xcc);// skip rom
+ 205   1          DS18B20_Write_Byte(0x55);
+ 206   1      
+ 207   1          for (j = 0; j < 8; j++)
+ 208   1          {
+ 209   2              DS18B20_Write_Byte(DS18B20_ID[i][j]);
+ 210   2          }
+ 211   1      
+ 212   1          DS18B20_Write_Byte(0xbe);// convert
+ 213   1          TL = DS18B20_Read_Byte(); // LSB
+ 214   1          TH = DS18B20_Read_Byte(); // MSB
+ 215   1      
+ 216   1          if (TH & 0xfc)
+ 217   1          {
+ 218   2              //flag=1;
+ 219   2              Temperature = (TH << 8) | TL;
+ 220   2              Temperature1 = (~Temperature) + 1;
+ 221   2              Temperature1 *= 0.0625f;
+ 222   2          }
+ 223   1          else
+ 224   1          {
+ 225   2              //flag=0;
+ 226   2              Temperature1 = ((TH << 8) | TL) * 0.0625;
+ 227   2          }
+ 228   1      
+ 229   1          return Temperature1;
+ 230   1      }
+ 231          
+ 232          
+ 233          void DS18B20_Search_Rom()
+ 234          {
+ 235   1          unsigned char tree_num[64] = {0}, Rom[64];        //bit_error[]=0时该位debug模式判断
+ 236   1          unsigned char i, j, k, l, r1, d, rom_sbit = 0, rom_out = 0;
+ 237   1      
+ 238   1          for(i = 0; i < 16; i++)               //取ID最小值开始，逐渐变大
+ 239   1          {
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 5   
+
+ 240   2              DS18B20_Rst();
+ 241   2              Delay_us(480);
+ 242   2              DS18B20_Write_Byte(0xf0);
+ 243   2      
+ 244   2              for(j = 0; j < 64; j++)
+ 245   2              {
+ 246   3                  r1 = DS18B20_Read_2Bit();
+ 247   3                  r1 = r1 & 0x03;
+ 248   3      
+ 249   3                  if(r1 == 0x01)        //0,1=0
+ 250   3                  {
+ 251   4                      Rom[j] = 0;
+ 252   4                      DS18B20_Write_Bit(0);
+ 253   4                  }
+ 254   3                  else if(r1 == 0x02)       //1,0=1
+ 255   3                  {
+ 256   4                      Rom[j] = 1;
+ 257   4                      DS18B20_Write_Bit(1);
+ 258   4                  }
+ 259   3                  else              //0,0=2     ，记录深度,执行判断
+ 260   3                  {
+ 261   4                      if(tree_num[j] == 0)            //j深度的节点为0则 节点设1左行
+ 262   4                      {
+ 263   5                          tree_num[j] = 1;
+ 264   5                          Rom[j] = 0;
+ 265   5                          DS18B20_Write_Bit(0);
+ 266   5                      }
+ 267   4                      else if(tree_num[j] == 1)         //若j深度的节点为1，执行判断  后有1左行无1右行
+ 268   4                      {
+ 269   5                          rom_sbit = 0;
+ 270   5      
+ 271   5                          for(k = j + 1; k < 64; k++)         //计算后面节点是否有1
+ 272   5                          {
+ 273   6                              rom_sbit |= tree_num[k];
+ 274   6                          }
+ 275   5      
+ 276   5                          if((rom_sbit & 0x01) == 1)              //若后有1继续左行
+ 277   5                          {
+ 278   6                              Rom[j] = 0;
+ 279   6                              DS18B20_Write_Bit(0);
+ 280   6                          }
+ 281   5                          else                      //否则改2右行
+ 282   5                          {
+ 283   6                              Rom[j] = 1;
+ 284   6                              DS18B20_Write_Bit(1);
+ 285   6                              tree_num[j] = 2;
+ 286   6      
+ 287   6                              for(l = j + 1; l < 64; l++)             //到新的路去了，后面的深度节点值清0
+ 288   6                              {
+ 289   7                                  tree_num[l] = 0;
+ 290   7                              }
+ 291   6                          }
+ 292   5                      }
+ 293   4                      else                  //否则j深度的节点为2
+ 294   4                      {
+ 295   5                          Rom[j] = 1;
+ 296   5                          DS18B20_Write_Bit(1);
+ 297   5                      }
+ 298   4                  }
+ 299   3      
+ 300   3                  if(j == 63)                   //对节点判断，若节点都往右走完了，则可以退出寻找ID了
+ 301   3                  {
+C51 COMPILER V9.54   DS18B20                                                               06/08/2022 15:56:11 PAGE 6   
+
+ 302   4                      rom_out = 0;
+ 303   4      
+ 304   4                      for(k = 0; k < 64; k++)
+ 305   4                      {
+ 306   5                          rom_out |= tree_num[k];       //找1
+ 307   5                      }
+ 308   4      
+ 309   4                      if((rom_out & 0x01) == 0x00)
+ 310   4                      {
+ 311   5                          rom_out &= 0x01;            //无1为0
+ 312   5                      }
+ 313   4                  }
+ 314   3              }
+ 315   2      
+ 316   2              for(j = 0; j < 64; j += 8)
+ 317   2              {
+ 318   3                  for(d = 0; d < 8; d++)
+ 319   3                  {
+ 320   4                      if(Rom[j + d] & 0x01)
+ 321   4                      {
+ 322   5                          ROMID[i][j / 8] >>= 1;
+ 323   5                          ROMID[i][j / 8] |= 0x80;
+ 324   5                      }
+ 325   4                      else
+ 326   4                      {
+ 327   5                          ROMID[i][j / 8] >>= 1;
+ 328   5                      }
+ 329   4                  }
+ 330   3              }
+ 331   2      
+ 332   2              if(rom_out == 0x00)                 //找完IDROM
+ 333   2              {
+ 334   3                  DS18B20_SensorNum = i + 1;
+ 335   3                  break;
+ 336   3              }
+ 337   2          }
+ 338   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1232    ----
+   CONSTANT SIZE    =     64    ----
+   XDATA SIZE       =     65     150
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

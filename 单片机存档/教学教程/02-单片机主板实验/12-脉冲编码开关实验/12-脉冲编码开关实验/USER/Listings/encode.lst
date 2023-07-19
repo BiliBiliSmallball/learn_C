@@ -1,0 +1,122 @@
+C51 COMPILER V9.54   ENCODE                                                                06/07/2022 17:27:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ENCODE
+OBJECT MODULE PLACED IN .\Objects\encode.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\encode\encode.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HAR
+                    -DWARE;..\SYSTEM;..\USER;..\HARDWARE\encode;..\HARDWARE\LCD12864) DEBUG OBJECTEXTEND PRINT(.\Listings\encode.lst) TABS(2)
+                    - OBJECT(.\Objects\encode.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "encode.h"
+   3          #include "lcd12864.h"
+   4          
+   5          unsigned char Now_Num[] = "Now the num:    "; //现在的值
+   6          unsigned char temp, num = 0x40;
+   7          
+   8          /**************************************************
+   9          函  数：  端口初始化
+  10          参  数：  无
+  11          返回值：  无
+  12          **************************************************/
+  13          void Encode_Hardware_Init(void)
+  14          {
+  15   1          P2_Mode_HighZ(A_PIN | B_PIN | C_PIN);
+  16   1      }
+  17          
+  18          /**************************************************
+  19          函  数：编码函数
+  20          参  数：  无
+  21          返回值：  无
+  22          **************************************************/
+  23          void Encode_Test(void)
+  24          {
+  25   1          if(!D_IN())
+  26   1          {
+  27   2              Show_Num(0, 1, (char*)Now_Num);
+  28   2          }
+  29   1      
+  30   1          if(!B_IN())
+  31   1          {
+  32   2              if(!A_IN())
+  33   2              {
+  34   3                  if(num == 0xFF)
+  35   3                  {
+  36   4                      num = 0xFF;
+  37   4                  }
+  38   3                  else
+  39   3                  {
+  40   4                      num = num + 1;
+  41   4                  }
+  42   3      
+  43   3                  temp = num / 16;
+  44   3      
+  45   3                  if(temp > 9)             //转换为ASCII码
+  46   3                      temp = temp + 0x37;
+  47   3                  else
+  48   3                      temp = temp + 0x30;
+  49   3      
+  50   3                  Now_Num[12] = temp;
+  51   3                  temp = num % 16;
+  52   3      
+  53   3                  if(temp > 9)             //转换为ASCII码
+C51 COMPILER V9.54   ENCODE                                                                06/07/2022 17:27:59 PAGE 2   
+
+  54   3                      temp = temp + 0x37;
+  55   3                  else
+  56   3                      temp = temp + 0x30;
+  57   3      
+  58   3                  Now_Num[13] = temp;
+  59   3                  Show_Num(0, 1, (char*)Now_Num);
+  60   3                  Delay_ms(10);
+  61   3              }
+  62   2              else
+  63   2              {
+  64   3                  if(num == 0x00)
+  65   3                  {
+  66   4                      num = 0x00;
+  67   4                  }
+  68   3                  else
+  69   3                  {
+  70   4                      num = num - 1;
+  71   4                  }
+  72   3      
+  73   3                  temp = num / 16;
+  74   3      
+  75   3                  if(temp > 9)             //转换为ASCII码
+  76   3                      temp = temp + 0x37;
+  77   3                  else
+  78   3                      temp = temp + 0x30;
+  79   3      
+  80   3                  Now_Num[12] = temp;
+  81   3                  temp = num % 16;
+  82   3      
+  83   3                  if(temp > 9)             //转换为ASCII码
+  84   3                      temp = temp + 0x37;
+  85   3                  else
+  86   3                      temp = temp + 0x30;
+  87   3      
+  88   3                  Now_Num[13] = temp;
+  89   3                  Show_Num(0, 1, (char*)Now_Num);
+  90   3                  Delay_ms(10);
+  91   3              }
+  92   2      
+  93   2              while(!B_IN());
+  94   2          }
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    225    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     19    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

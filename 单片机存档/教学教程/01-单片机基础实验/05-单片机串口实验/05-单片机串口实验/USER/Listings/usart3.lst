@@ -1,0 +1,98 @@
+C51 COMPILER V9.54   USART3                                                                06/07/2022 09:31:16 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE USART3
+OBJECT MODULE PLACED IN .\Objects\usart3.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\usart3\usart3.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HAR
+                    -DWARE;..\SYSTEM;..\USER;..\HARDWARE\led;..\HARDWARE\usart3) DEBUG OBJECTEXTEND PRINT(.\Listings\usart3.lst) TABS(2) OBJE
+                    -CT(.\Objects\usart3.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "usart3.h"
+   3          
+   4          uint8_t usart3_rx_buf[MAX_NUM] = 0;
+   5          uint8_t usart3_rx_start = 0;
+   6          
+   7          /**************************************************
+   8          函数名称：Usart3_Configure
+   9          函数说明：串口3初始化配置函数   
+  10          输入参数：baud 波特率     
+  11          返 回 值：  无      
+  12          **************************************************/
+  13          void Usart3_Configure(uint32_t baud)
+  14          {
+  15   1        S3CON = 0x10;
+  16   1        T2L  = (65536 - FOSC / baud / 4);
+  17   1          T2H  = (65536 - FOSC / baud / 4) >> 8;
+  18   1          AUXR = 0x14;                    //启动定时器
+  19   1          IE2 = ES3;                      //使能串口3中断
+  20   1          EA = 1;               //开启总中断
+  21   1        SetBits(P_SW2,S3_S);        //串口3设置                               
+  22   1        P5_Mode_PullUp(PIN_0|PIN_1);    //设置为准双向口
+  23   1      }
+  24          /**************************************************
+  25          函数名称：Usart3_IRQHandler(void) interrupt UART_VECTOR
+  26          函数说明：串口3中断服务函数 UART3_VECTOR  串口3中断
+  27          输入参数：  无      
+  28          返 回 值：  无      
+  29          **************************************************/
+  30          void Usart3_IRQHandler(void) interrupt UART3_VECTOR using 1
+  31          {
+  32   1          if (S3CON & S3RI)
+  33   1          { 
+  34   2          if(usart3_rx_start>=MAX_NUM)
+  35   2            usart3_rx_start = 0;
+  36   2              usart3_rx_buf[usart3_rx_start++] = S3BUF;                     
+  37   2              S3CON &= ~S3RI;             
+  38   2          }
+  39   1        
+  40   1      }
+  41          
+  42          /**************************************************
+  43          函数名称：Usart3_SendChar 
+  44          函数说明：串口3发送函数     
+  45          输入参数：Udat  1位16进制的数据   
+  46          返 回 值：  无      
+  47          **************************************************/
+  48          void Usart3_SendChar(uint8_t dat) 
+  49          {
+  50   1        
+  51   1          S3BUF = dat;          //写数据到数据寄存器
+  52   1        while(!(S3CON&S3TI));
+  53   1        S3CON&=~S3TI;
+C51 COMPILER V9.54   USART3                                                                06/07/2022 09:31:16 PAGE 2   
+
+  54   1      }
+  55          
+  56          /**************************************************
+  57          函数名称：Usart3_SendString
+  58          函数说明：串口3发送字符串或数组     
+  59          输入参数：*PBuf 指向数组或者字符串
+  60          注意：若发送数组时，遇到0x00时，程序认为是数据的结尾
+  61          返 回 值：  无      
+  62          **************************************************/
+  63          void Usart3_SendString(uint8_t *PBuf)
+  64          {
+  65   1        while (*PBuf)           //检测字符串结束标志
+  66   1        { 
+  67   2          Usart3_SendChar(*PBuf++);   //发送当前字符
+  68   2        }
+  69   1      }
+  70          
+  71          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    242    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    101       7
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

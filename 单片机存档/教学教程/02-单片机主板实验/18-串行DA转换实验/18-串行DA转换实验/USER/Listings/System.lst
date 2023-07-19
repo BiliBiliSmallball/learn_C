@@ -1,0 +1,89 @@
+C51 COMPILER V9.54   SYSTEM                                                                06/08/2022 10:34:49 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE SYSTEM
+OBJECT MODULE PLACED IN .\Objects\System.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\SYSTEM\System.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\
+                    -SYSTEM;..\USER;..\HARDWARE\DAC) DEBUG OBJECTEXTEND PRINT(.\Listings\System.lst) TABS(2) OBJECT(.\Objects\System.obj)
+
+line level    source
+
+   1          #include "system.h"//系统文件 不建议修改
+   2          
+   3          /***********************************************
+   4          函数名称：Delay_ms
+   5          功    能：STC8系列单片机1ms延时程序
+   6          入口参数：ms:延时的毫秒数
+   7          返 回 值：无  
+   8          备    注：示波器实测：1.01ms，内部时钟：24MHz           
+   9          ************************************************/
+  10          void Delay_ms(unsigned int ms)
+  11          {
+  12   1        unsigned int i;
+  13   1        while( (ms--) != 0)
+  14   1        {
+  15   2          for(i = 0; i < 1850; i++); 
+  16   2        }             
+  17   1      }
+  18          /***********************************************
+  19          函数名称：System_Init
+  20          功    能：单片机系统初始化
+  21          入口参数：无
+  22          返 回 值：无  
+  23          备    注：STC-ISP下载软件中选择IRC频率：24MHz 
+  24                    以下的函数和宏定义，请参考
+  25                    STC8A.H文件中的注释
+  26          ************************************************/
+  27          void System_Init(void)
+  28          {   
+  29   1        Delay_ms(300);                      //延时等待上电稳定
+  30   1        SetBits(P_SW2,EAXFR);               //允许访问特殊功能寄存器
+  31   1        SetBits(IRC24MCR,ENIRC24M);         //使能内部24M IRC 
+  32   1        while (!(IRC24MCR & IRC24MST));     //等待时钟稳定
+  33   1        ClrBits(CKSEL,Bits_ALL);            //选择内部24M IRC，时钟不输出
+  34   1        ClrBits(CLKDIV,Bits_ALL);           //主时钟不分频
+  35   1        ClrBits(P_SW2,EAXFR);               //关闭访问特殊功能寄存器 
+  36   1        
+  37   1        //复位脚用作IO口P54
+  38   1        ClrBits(RSTCFG,P54RST);
+  39   1        
+  40   1        //全部端口设置为高阻  
+  41   1        //P0端口设置为高阻
+  42   1        P0_Mode_HighZ(PIN_ALL);
+  43   1        //P1端口设置为高阻
+  44   1        P1_Mode_HighZ(PIN_ALL);
+  45   1        //P2端口设置为高阻
+  46   1        P2_Mode_HighZ(PIN_ALL);
+  47   1        //P4端口设置为高阻
+  48   1        P4_Mode_HighZ(PIN_ALL);
+  49   1        //P5端口设置为高阻
+  50   1        P5_Mode_HighZ(PIN_ALL);
+  51   1        //P6端口设置为高阻
+  52   1        P6_Mode_HighZ(PIN_ALL);
+  53   1        //P7端口设置为高阻
+  54   1        P7_Mode_HighZ(PIN_ALL); 
+C51 COMPILER V9.54   SYSTEM                                                                06/08/2022 10:34:49 PAGE 2   
+
+  55   1        
+  56   1        
+  57   1        //将P30 P31 设置为准双向口，用于下载
+  58   1        P3_Mode_PullUp(PIN_0|PIN_1);  
+  59   1        //P3其他端口设置为高阻
+  60   1        P3_Mode_HighZ(PIN_2|PIN_3|PIN_4|PIN_5|PIN_6|PIN_7);
+  61   1      }
+  62          
+  63          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    118    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

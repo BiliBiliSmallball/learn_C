@@ -1,0 +1,75 @@
+C51 COMPILER V9.54   DAC0832                                                               06/07/2022 20:24:40 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DAC0832
+OBJECT MODULE PLACED IN .\Objects\dac0832.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\DAC0832\dac0832.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\DAC0832) DEBUG OBJECTEXTEND PRINT(.\Listings\dac0832.lst) TABS(2) OBJECT(.\Objects
+                    -\dac0832.obj)
+
+line level    source
+
+   1          #include "dac0832.h"
+   2          
+   3          uint8_t code tab[128]={128,134,140,146,152,158,165,170,176,
+   4          182,188,193,198,203,208,213,218,222,226,230,234,237,240,243,
+   5          245,248,250,251,253,254,254,255,255,255,254,254,253,251,250,
+   6          248,245,243,240,237,234,230,226,222,218,213,208,203,198,193,
+   7          188,182,176,170,165,158,152,146,140,134,127,121,115,109,103,
+   8          97,90,85,79,73,67,62,57,52,47,42,37,33,29,25,21,18,15,12,10,
+   9          7,5,4,2,1,1,0,0,0,1,1,2,4,5,7,10,12,15,18,21,25,29,33,37,42,
+  10          47,52,57,62,67,73,79,85,90,97,103,109,115,121};
+  11          
+  12          /***********************************************
+  13          函数名称：DAC_Init
+  14          功    能：DAC0832初始化
+  15          入口参数：无
+  16          返 回 值：无            
+  17          ************************************************/
+  18          void DAC_Init(void)
+  19          {
+  20   1        P1M1 = 0x00;    //设置P1口为推挽输出
+  21   1        P1M0 = 0xff;
+  22   1        
+  23   1        P0M1 = 0x00;    //设置P0^0 ~ P0^3 为推挽输出
+  24   1        P0M0 = 0x0f;
+  25   1        
+  26   1        CS    = 0;  
+  27   1        XFRE  = 0;
+  28   1        WR_EN = 0;
+  29   1        ILE   = 1;
+  30   1      }
+  31          
+  32          /***********************************************
+  33          函数名称：sin
+  34          功    能：正弦波产生函数
+  35          入口参数：无
+  36          返 回 值：无            
+  37          ************************************************/
+  38          void sin(void)    //正弦波
+  39          {
+  40   1        unsigned char  i;
+  41   1        while(1)
+  42   1        {
+  43   2         if(++i==128)
+  44   2            i=0;
+  45   2         P1=tab[i];
+  46   2         Delay_ms(1);    //延时，调节输出频率
+  47   2        }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     50    ----
+   CONSTANT SIZE    =    128    ----
+C51 COMPILER V9.54   DAC0832                                                               06/07/2022 20:24:40 PAGE 2   
+
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,180 @@
+C51 COMPILER V9.54   INFRARED                                                              06/08/2022 14:19:15 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE INFRARED
+OBJECT MODULE PLACED IN .\Objects\infrared.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\infrared\infrared.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..
+                    -\HARDWARE;..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\LCD12864;..\HARDWARE\infrared;..\HARDWARE\exti;..\HARDWARE\pwm) 
+                    -DEBUG OBJECTEXTEND PRINT(.\Listings\infrared.lst) TABS(2) OBJECT(.\Objects\infrared.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "infrared.h"
+   3          #include "key.h"
+   4          #include "pwm.h"
+   5          #include "lcd12864.h"
+   6          #include "stdio.h"
+   7          /**********************************************************
+   8          *功　能：红外硬件初始化
+   9          *参　数：无
+  10          *返回值：无
+  11          **********************************************************/
+  12          void Infrared_Hardware_Init(void)
+  13          {
+  14   1        Key_Configure();      //按键发射
+  15   1        Pwm1_Configure();     //TX
+  16   1        P2_Mode_HighZ(PIN_7);   
+  17   1      }
+  18          
+  19          /**********************************************************
+  20          *功　能：分析红外信号
+  21          *参　数：无
+  22          *返回值：高电平信号数据
+  23          **********************************************************/
+  24          uint8_t IR_RC_Time(void)
+  25          {
+  26   1        int l_time=0,h_time=0;
+  27   1        char num[8]={"0"};
+  28   1        while(!READ_RX())   //先读低电平时长
+  29   1        {
+  30   2          l_time++;
+  31   2          Delay_us(50);
+  32   2          
+  33   2          //超时溢出
+  34   2          if(l_time > 400)//低电平超时20ms退出
+  35   2            break;
+  36   2        }
+  37   1        while(READ_RX())    //先读低电平时长
+  38   1        {
+  39   2          h_time++;
+  40   2          Delay_us(50);
+  41   2          
+  42   2          //超时溢出
+  43   2          if(h_time > 200)//高电平超时10ms退出
+  44   2            break; 
+  45   2        }
+  46   1        if((l_time>100)&&(l_time<200)&&(h_time>50)&&(h_time<100))//150,75
+  47   1        {
+  48   2          return 1;//信息头
+  49   2        }
+  50   1        else if((l_time>5)&&(l_time<15)&&(h_time>5)&&(h_time<15))//10,10
+  51   1        {
+  52   2          return 2;//零码
+  53   2        }
+C51 COMPILER V9.54   INFRARED                                                              06/08/2022 14:19:15 PAGE 2   
+
+  54   1        else if((l_time>5)&&(l_time<15)&&(h_time>15)&&(h_time<45))//10,30
+  55   1        {
+  56   2          return 3;//一码
+  57   2        }
+  58   1        else
+  59   1        {
+  60   2          return 0;//错误码
+  61   2        }
+  62   1      }
+  63          
+  64          /**********************************************************
+  65          *功　能：红外发送一个字节
+  66          *参　数：发送的字节
+  67          *返回值：无
+  68          **********************************************************/
+  69          void Infrared_SendByte( uint8_t ir )
+  70          {
+  71   1        uint8_t i = 0;
+  72   1        for( i=0;i<8;i++ )
+  73   1        {
+  74   2          WRITE_IR(1);
+  75   2          Delay_us(500);
+  76   2          WRITE_IR(0);
+  77   2          if( ir & (0x80 >> i ) )//先发字节高位
+  78   2          {
+  79   3            Delay_ms(1);
+  80   3            Delay_us(500);
+  81   3          }
+  82   2          else
+  83   2          {
+  84   3            Delay_us(500);
+  85   3          }
+  86   2        }
+  87   1      }
+  88          
+  89          /**********************************************************
+  90          *功　能：接收一个字节
+  91          *参　数：无
+  92          *返回值：接收的字节
+  93          **********************************************************/
+  94          uint8_t Infrared_RecvByte(void)
+  95          {
+  96   1        uint8_t i = 0,dat =0;
+  97   1        for( i=0;i<8;i++ )
+  98   1        {
+  99   2          dat <<= 1;
+ 100   2          if(IR_RC_Time()==3)
+ 101   2          {
+ 102   3            dat++;
+ 103   3          }
+ 104   2        }
+ 105   1        return dat;
+ 106   1      }
+ 107          
+ 108          /**********************************************************
+ 109          *功　能：红外发送数据
+ 110          *参　数：irdate：发送的数据的地址 lenght：数据长度
+ 111          *返回值：无
+ 112          **********************************************************/
+ 113          void Infrared_SendDate( uint8_t *  irdate ,uint8_t lenght )
+ 114          {
+ 115   1        uint8_t i;
+C51 COMPILER V9.54   INFRARED                                                              06/08/2022 14:19:15 PAGE 3   
+
+ 116   1        WRITE_IR(1);
+ 117   1        Delay_ms(9);
+ 118   1        WRITE_IR(0);
+ 119   1        Delay_ms(4);
+ 120   1        Delay_us(500);
+ 121   1        for( i = 0; i < lenght; i++ )
+ 122   1        {
+ 123   2          Infrared_SendByte( irdate[i] ); 
+ 124   2        }
+ 125   1        WRITE_IR(1);
+ 126   1        Delay_us(560);
+ 127   1        WRITE_IR(0);
+ 128   1      }
+ 129          
+ 130          
+ 131          /**********************************************************
+ 132          *功　能：控制开启/关闭载波
+ 133          *参　数：num=0 关
+ 134              num=1 开
+ 135          *返回值：无
+ 136          **********************************************************/
+ 137          void WRITE_IR(uint8_t num)
+ 138          {
+ 139   1        if(num)
+ 140   1        {
+ 141   2          PWMCR = 0x80;
+ 142   2        }
+ 143   1        else
+ 144   1        {
+ 145   2          PWMCR = 0x00;
+ 146   2          P11 = 0;
+ 147   2        }
+ 148   1        
+ 149   1      }
+ 150          
+ 151          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    554    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----      21
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

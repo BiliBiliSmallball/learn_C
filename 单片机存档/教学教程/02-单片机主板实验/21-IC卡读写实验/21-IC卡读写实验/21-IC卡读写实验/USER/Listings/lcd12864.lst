@@ -1,0 +1,356 @@
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCD12864
+OBJECT MODULE PLACED IN .\Objects\lcd12864.obj
+COMPILER INVOKED BY: D:\Software\C51\BIN\C51.EXE ..\HARDWARE\LCD12864\lcd12864.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.
+                    -.\HARDWARE;..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\24C02;..\HARDWARE\LCD12864) DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\lcd12864.lst) OBJECT(.\Objects\lcd12864.obj)
+
+line level    source
+
+   1          #include <system.h>
+   2          #include "lcd12864.h"
+   3          #include "lcdziku.h"
+   4          
+   5          /***********************************************
+   6          函数名称：SendCommandToLCD
+   7          功    能：写命令到LCD中
+   8          入口参数：com 指令
+   9          返 回 值：无
+  10          ************************************************/
+  11          void SendCommandToLCD(uint8_t com)
+  12          {
+  13   1          Delay_us(10);
+  14   1          RS(0);
+  15   1          Delay_us(10);
+  16   1          RW(0);
+  17   1          ClrBits(GPIO_DAT, PINS_DATA);
+  18   1          SetBits(GPIO_DAT, com);
+  19   1          Delay_us(100);
+  20   1          EN(1);
+  21   1          Delay_us(10);
+  22   1          EN(0);
+  23   1          Delay_us(10);
+  24   1          ClrBits(GPIO_DAT, PINS_DATA);
+  25   1      }
+  26          
+  27          /*********************************************************************
+  28          函数名称：SetLCD
+  29          功    能：设置首地址
+  30          入口参数：page： 设置页 startline：设定显示开始行  olumn：设定列地址
+  31          返 回 值：无
+  32          **********************************************************************/
+  33          void SetLCD(uint8_t page, uint8_t startline, uint8_t column)
+  34          {
+  35   1          Delay_us(10);
+  36   1          SetLine(page);
+  37   1          Delay_us(10);
+  38   1          SetStartLine(startline);
+  39   1          Delay_us(10);
+  40   1          SetColumn(column);
+  41   1          Delay_us(10);
+  42   1      }
+  43          /*设置页 0xb8是页的首地址*/
+  44          void SetLine(uint8_t page)
+  45          {
+  46   1          page = 0xb8 | page; //1011 1xxx 0<=page<=7 设定页地址--X 0-7,8行为一页64/8=8，共8页
+  47   1          SendCommandToLCD(page);
+  48   1      }
+  49          
+  50          /*设定显示开始行，0xc0是行的首地址*/
+  51          void SetStartLine(uint8_t startline)
+  52          {
+  53   1          startline = 0xc0 | startline; //1100 0000
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 2   
+
+  54   1          SendCommandToLCD(startline); //设置从哪行开始：0--63，一般从0 行开始显示
+  55   1      }
+  56          
+  57          /*设定列地址--Y 0-63 ，0x40是列的首地址*/
+  58          void SetColumn(uint8_t column)
+  59          {
+  60   1          column = column & 0x3f; //column最大值为64，越出 0=<column<=63
+  61   1          column = 0x40 | column; //01xx xxxx
+  62   1          SendCommandToLCD(column);
+  63   1      }
+  64          
+  65          
+  66          /*开关显示，0x3f是开显示，0x3e是关显示*/
+  67          void SetOnOff(uint8_t onoff)
+  68          {
+  69   1          onoff = 0x3e | onoff; //0011 111x,onoff只能为0或者1
+  70   1          SendCommandToLCD(onoff);
+  71   1      }
+  72          
+  73          /***********************************************
+  74          函数名称：LCD12864_WriteByte
+  75          功    能：写显示数据
+  76          入口参数：dat 数据
+  77          返 回 值：无
+  78          ************************************************/
+  79          void LCD12864_WriteByte(uint8_t dat)
+  80          {
+  81   1          Delay_us(10);
+  82   1          RS(1);
+  83   1          Delay_us(10);
+  84   1          RW(0);
+  85   1          Delay_us(10);
+  86   1          EN(0);
+  87   1          ClrBits(GPIO_DAT, PINS_DATA);
+  88   1          SetBits(GPIO_DAT, dat);
+  89   1          Delay_us(100);
+  90   1          EN(1);
+  91   1          Delay_us(10);
+  92   1          EN(0);
+  93   1          Delay_us(10);
+  94   1          ClrBits(GPIO_DAT, PINS_DATA);
+  95   1      }
+  96          
+  97          
+  98          
+  99          /***********************************************
+ 100          函数名称：SelectScreen
+ 101          功    能：选择屏幕显示
+ 102          入口参数：选择屏幕screen: 0-全屏,1-左屏,2-右屏
+ 103          返 回 值：无
+ 104          ************************************************/
+ 105          void SelectScreen(uint8_t screen)
+ 106          {
+ 107   1          switch(screen)
+ 108   1          {
+ 109   2              case 0:
+ 110   2                  CS1(0);//全屏
+ 111   2                  Delay_us(10);
+ 112   2                  CS2(0);
+ 113   2                  Delay_us(10);
+ 114   2                  break;
+ 115   2      
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 3   
+
+ 116   2              case 1:
+ 117   2                  CS1(1);//左屏
+ 118   2                  Delay_us(10);
+ 119   2                  CS2(0);
+ 120   2                  Delay_us(10);
+ 121   2                  break;
+ 122   2      
+ 123   2              case 2:
+ 124   2                  CS1(0);//右屏
+ 125   2                  Delay_us(10);
+ 126   2                  CS2(1);
+ 127   2                  Delay_us(10);
+ 128   2                  break;
+ 129   2      
+ 130   2              default:
+ 131   2                  break;
+ 132   2          }
+ 133   1      }
+ 134          
+ 135          /***********************************************
+ 136          函数名称：ClearScreen
+ 137          功    能：清屏
+ 138          入口参数：清屏screen: 0-全屏,1-左屏,2-右
+ 139          返 回 值：无
+ 140          ************************************************/
+ 141          void ClearScreen(uint8_t screen)          //显示汉字时，在字库中添加新的汉字码是，注意也要在当前show_hz中改变清屏
+             -码的位子
+ 142          {
+ 143   1          //
+ 144   1          for(screen = 0; screen < 8; screen++)
+ 145   1          {
+ 146   2              Show_Hz(screen, 0, 8);
+ 147   2              Show_Hz(screen, 1, 8);
+ 148   2              Show_Hz(screen, 2, 8);
+ 149   2              Show_Hz(screen, 3, 8);
+ 150   2              Show_Hz(screen, 4, 8);
+ 151   2              Show_Hz(screen, 5, 8);
+ 152   2              Show_Hz(screen, 6, 8);
+ 153   2              Show_Hz(screen, 7, 8);
+ 154   2          }
+ 155   1      }
+ 156          
+ 157          /***********************************************
+ 158          函数名称：lcd_rol
+ 159          功    能：向上滚屏  这里用做滚动显示
+ 160          入口参数：无
+ 161          返 回 值：无
+ 162          ************************************************/
+ 163          void lcd_rol(void)
+ 164          {
+ 165   1          uint8_t i;
+ 166   1      
+ 167   1          for(i = 0; i < 64; i++)
+ 168   1          {
+ 169   2              CS1(0); // 片选1
+ 170   2              SendCommandToLCD(0xc0 + i);
+ 171   2              CS1(1);
+ 172   2              CS2(0); // 片选2
+ 173   2              SendCommandToLCD(0xc0 + 62 - i);
+ 174   2              CS2(0); // 片选2
+ 175   2              Delay_us(10);
+ 176   2          }
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 4   
+
+ 177   1      }
+ 178          
+ 179          /***********************************************
+ 180          函数名称：LCD12864_Software_Init
+ 181          功    能：初始化LCD
+ 182          入口参数：无
+ 183          返 回 值：无
+ 184          ************************************************/
+ 185          void LCD12864_Software_Init(void)
+ 186          {
+ 187   1          LCD_ALL_DIR_OUT();
+ 188   1          Delay_us(10);
+ 189   1          SelectScreen(0);
+ 190   1          SetOnOff(0); //关显示
+ 191   1          Delay_us(10);
+ 192   1          SelectScreen(0);
+ 193   1          SetOnOff(1); //开显示
+ 194   1          Delay_us(10);
+ 195   1          SelectScreen(0);
+ 196   1          ClearScreen(0);//清屏
+ 197   1          Delay_us(10);
+ 198   1          SetStartLine(0); //开始行:0
+ 199   1          Delay_us(10);
+ 200   1          SetOnOff(0x3f);     //开显示
+ 201   1          Delay_us(10);
+ 202   1          ClearScreen(0);//清屏
+ 203   1          Delay_us(10);
+ 204   1      }
+ 205          
+ 206          /************************************************************
+ 207          函数名称：Show_Hz
+ 208          功    能：汉字显示函数
+ 209          入口参数：X：横坐标值，Y：纵坐标值，hz：在字库中的第几个汉字
+ 210          返 回 值：无
+ 211          *************************************************************/
+ 212          void Show_Hz(uint8_t x, uint8_t y, uint8_t hz)
+ 213          {
+ 214   1          uint8_t l_r = 0;
+ 215   1      
+ 216   1          if(x <= 3)
+ 217   1              l_r = 1;
+ 218   1          else
+ 219   1              l_r = 2;
+ 220   1      
+ 221   1          Display(l_r, y * 2, x * 16, hz);
+ 222   1      }
+ 223          
+ 224          /************************************************************
+ 225          函数名称：Show_Num
+ 226          功    能：字母、数字、字符串显示函数
+ 227          入口参数：X：横坐标值，Y：纵坐标值，str：是需要显示的内容
+ 228          返 回 值：无
+ 229          *************************************************************/
+ 230          void Show_Num(uint8_t x, uint8_t y, char*str)
+ 231          {
+ 232   1          uint8_t l_r = 0, i = 0;
+ 233   1      
+ 234   1          while(*str != '\0')
+ 235   1          {
+ 236   2              if(x > 15)
+ 237   2              {
+ 238   3                  x = 0;
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 5   
+
+ 239   3                  i += 2;
+ 240   3              }
+ 241   2      
+ 242   2              if(x < 8)l_r = 1;
+ 243   2              else l_r = 2;
+ 244   2      
+ 245   2              Displayen(l_r, y * 2 + i, x * 8, *str++);
+ 246   2              x++;
+ 247   2          }
+ 248   1      }
+ 249          
+ 250          /**********************************************************************
+ 251          函数名称：Display
+ 252          功    能：显示全角汉字
+ 253          入口参数：SS选屏参数，pagr选页参数，column选列参数，number选第几汉字输出
+ 254          返 回 值：无
+ 255          ***********************************************************************/
+ 256          void Display(uint8_t ss, uint8_t page, uint8_t column, uint8_t number)
+ 257          {
+ 258   1          int i;      //选屏参数，pagr选页参数，column选列参数，number选第几汉字输出
+ 259   1          SetOnOff(0x3f);                     //开显示
+ 260   1          SelectScreen(ss);
+ 261   1          column = column & 0x3f;
+ 262   1          SetLine(page);                      //写上半页
+ 263   1          SetColumn(column);          //控制列
+ 264   1      
+ 265   1          for(i = 0; i < 16; i++)             //控制16列的数据输出
+ 266   1          {
+ 267   2              LCD12864_WriteByte(Hzk[i + 32 * number]); //i+32*number汉字的前16个数据输出
+ 268   2          }
+ 269   1      
+ 270   1          SetLine(page + 1);          //写下半页
+ 271   1          SetColumn(column);          //控制列
+ 272   1      
+ 273   1          for(i = 0; i < 16; i++)             //控制16列的数据输出
+ 274   1          {
+ 275   2              LCD12864_WriteByte(Hzk[i + 32 * number + 16]);  //i+32*number+16汉字的后16个数据输出
+ 276   2          }
+ 277   1      }
+ 278          
+ 279          /**********************************************************************
+ 280          函数名称：Displayen
+ 281          功    能：显示半角汉字和数字和字母
+ 282          入口参数：SS选屏参数，pagr选页参数，column选列参数，number选第几汉字输出
+ 283          返 回 值：无
+ 284          ***********************************************************************/
+ 285          void Displayen(uint8_t ss, uint8_t page, uint8_t column, char num)
+ 286          {
+ 287   1          uint8_t i;//选屏参数，pagr选页参数，column选列参数，number选第几汉字输出
+ 288   1          uint8_t number = num;
+ 289   1          SelectScreen(ss);
+ 290   1          column = column & 0x3f;
+ 291   1          SetLine(page);      //写上半页
+ 292   1          SetColumn(column);
+ 293   1      
+ 294   1          for(i = 0; i < 8; i++)
+ 295   1          {
+ 296   2              LCD12864_WriteByte(ascll[i + 16 * number]);
+ 297   2          }
+ 298   1      
+ 299   1          SetLine(page + 1);  //写下半页
+ 300   1          SetColumn(column);
+C51 COMPILER V9.54   LCD12864                                                              06/29/2022 17:50:36 PAGE 6   
+
+ 301   1      
+ 302   1          for(i = 0; i < 8; i++)
+ 303   1          {
+ 304   2              LCD12864_WriteByte(ascll[i + 16 * number + 8]);
+ 305   2          }
+ 306   1      }
+ 307          
+ 308          /**********************************************************************
+ 309          函数名称：LCD_ALL_DIR_OUT
+ 310          功    能：设置为使用引脚输出模式
+ 311          入口参数：无
+ 312          返 回 值：无
+ 313          ***********************************************************************/
+ 314          void LCD_ALL_DIR_OUT(void)
+ 315          {
+ 316   1          P0_Mode_PullUp(PINS_DATA);
+ 317   1          P2_Mode_PullUp(PINS_CMD);
+ 318   1          ClrBits(GPIO_CMD, PINS_ALL);
+ 319   1          ClrBits(GPIO_DAT, PINS_ALL);
+ 320   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1115    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   3024      26
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\System.obj",
+".\Objects\led.obj",
+".\Objects\key.obj" 
+TO ".\Objects\TEST" 
+PRINT(".\Listings\TEST.m51") RAMSIZE(256) 

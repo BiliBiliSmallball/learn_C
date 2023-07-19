@@ -1,0 +1,105 @@
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 21:15:02 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\US
+                    -ER;..\HARDWARE\LCD12864;..\HARDWARE\pwm;..\HARDWARE\adc0809) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJEC
+                    -T(.\Objects\main.obj)
+
+line level    source
+
+   1          /***************************************************************************
+   2          实验名称：  并行AD转换实验
+   3          
+   4          实验模块：  STC8A核心板v2.1、主板区：12864图形液晶、并行A/D转换
+   5          
+   6          实验接线：  STC8A核心板   -------------   12864图形液晶
+   7                        P2.0      -------------       CS1
+   8                        P2.1      -------------       CS2
+   9                        P2.2      -------------       RS
+  10                        P2.3      -------------       RW
+  11                        P2.4      -------------       RE       
+  12                   P0.0~P0.7      -------------       DB0~DB7   
+  13                        
+  14                     STC8A核心板   -------------   并行A/D转换
+  15                      P7.0~P7.7    -------------     D0~D7(J36)
+  16                        P1.1       -------------      CLKX2
+  17                        P6.0       -------------      START
+  18                        P6.1       -------------      EOC
+  19                        P6.2       -------------      OE
+  20                        P6.4       -------------      A
+  21                        P6.5       -------------      B
+  22                        P6.6       -------------      C
+  23                        P6.7       -------------      ALE
+  24                      
+  25          现象描述：  通过#define OPEN_CHL 选择输入通道，下载后将CH0连接STC8A的ADC接口，
+  26                    转动STC8A的电位器改变输出电压，lcd2864显示连接通道采集的电压。
+  27          
+  28          使用STC-ISP下载时请注意在【硬件选项】的第一项【输入用户程序运行是的IRC频率】
+  29          软件默认是11.0592MHz  但我们程序用的都是24MHz，所以我们需要手动输入或者下拉选择
+  30          24MHz然后再点击下载即可。然后即可看到右下方窗口提示
+  31            . 用户设定频率: 24.000MHz
+  32            . 调节后的频率: 24.000MHz
+  33            . 频率调节误差: 0.000%
+  34            
+  35          更新时间：2018.9.14
+  36          ***************************************************************************/
+  37          
+  38          #include <intrins.h>
+  39          #include "system.h"
+  40          #include "lcd12864.h"
+  41          #include "adc0809.h"
+  42          #include "pwm.h"
+  43          #include "stdio.h"
+  44          
+  45          #define OPEN_CHL (IN0)  
+  46          //本实验开启1个通道,可根据需求增加或删减通道(浮空引脚电压约1.68)
+  47          //定义开启转换的通道最多8通道：( IN0 | IN1 | IN2 | IN3 | IN4 | IN5 | IN6 | IN7 )
+  48                          
+  49          void main(void)
+  50          {
+  51   1        uint8_t sx = 0; 
+  52   1        float vol = 0;
+  53   1        int chl = 0;
+C51 COMPILER V9.54   MAIN                                                                  06/07/2022 21:15:02 PAGE 2   
+
+  54   1        char show[17]={0};
+  55   1        System_Init();            //系统初始化
+  56   1        Pwm1_Configure();
+  57   1        ADC0809_Hardware_Init();             //ADC初始化
+  58   1        LCD12864_Software_Init();           //液晶初始化
+  59   1          while(1)
+  60   1        {
+  61   2          sx = 0;
+  62   2          //通道0到通道7循环采集电压
+  63   2          for(chl=0;chl<8;chl++)
+  64   2          {
+  65   3            //判断是否为开启的通道
+  66   3            if(OPEN_CHL&(1<<chl))
+  67   3            {
+  68   4              vol=ADC0809_Convert(chl)*5/255;
+  69   4              sprintf(show,"CH:%2d  Vol:%3.1fV",chl,vol);
+  70   4              Show_Num(0,sx%4,show);
+  71   4              sx++;
+  72   4              Delay_ms(500);
+  73   4            }
+  74   3          }
+  75   2        }
+  76   1      }
+  77          
+  78          //                                      endfile
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    247    ----
+   CONSTANT SIZE    =     36    ----
+   XDATA SIZE       =   ----      24
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

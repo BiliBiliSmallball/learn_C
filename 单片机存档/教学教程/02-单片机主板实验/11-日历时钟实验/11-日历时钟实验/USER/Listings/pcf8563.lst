@@ -1,0 +1,187 @@
+C51 COMPILER V9.54   PCF8563                                                               06/07/2022 17:11:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE PCF8563
+OBJECT MODULE PLACED IN .\Objects\pcf8563.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\PCF8563\pcf8563.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\LCD12864;..\HARDWARE\PCF_IIC;..\HARDWARE\PCF8563) DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\pcf8563.lst) TABS(2) OBJECT(.\Objects\pcf8563.obj)
+
+line level    source
+
+   1          #include <system.h>
+   2          #include "pcf8563.h" 
+   3          #include "pcfiic.h"
+   4          #include "lcd12864.h"
+   5          
+   6          unsigned char  time_buf1[8]={20,22,6,7,16,57,0,2};
+   7          unsigned char time_buf[8];
+   8          unsigned char time_buf2[8];
+   9          unsigned char *time_buf1_sp;
+  10          
+  11          
+  12          void PCF8563_Init(void)
+  13          {
+  14   1        PCF_IIC_Hardware_Init();
+  15   1      }
+  16          
+  17          /************************************************************
+  18          函数名称：PCF8563_ReadOneByte
+  19          功    能：在PCF8563指定地址读出一个数据
+  20          入口参数：ReadAddr:开始读数的地址  
+  21          返 回 值：读到的数据
+  22          *************************************************************/
+  23          uint8_t PCF8563_ReadOneByte(uint16_t ReadAddr)
+  24          {         
+  25   1        uint8_t temp=0;
+  26   1        PCF_IIC_Start();  //开始
+  27   1        PCF_IIC_Send_Byte(PCF8563_ADDRESS);//发送器件地址
+  28   1        PCF_IIC_Wait_Ack(); //等待应答
+  29   1        PCF_IIC_Send_Byte(ReadAddr);//发送寄存器地址
+  30   1        PCF_IIC_Wait_Ack();//等待应答
+  31   1        PCF_IIC_Start();  //开始
+  32   1        PCF_IIC_Send_Byte(PCF8563_ADDRESS|READ);//发送器件地址
+  33   1        PCF_IIC_Wait_Ack();//等待应答
+  34   1        temp=PCF_IIC_Read_Byte(0);       
+  35   1          PCF_IIC_Stop();//产生一个停止条件     
+  36   1        return temp;
+  37   1      }
+  38          
+  39          /*****************************************************************
+  40          函数名称：PCF8563_WriteOneByte
+  41          功    能：在PCF8563指定地址写入一个数据
+  42          入口参数：WriteAddr  :写入数据的目的地址  DataToWrite:要写入的数据
+  43          返 回 值：无
+  44          *******************************************************************/
+  45          void PCF8563_WriteOneByte(uint8_t WriteAddr,uint8_t DataToWrite)
+  46          {                                                    
+  47   1          PCF_IIC_Start();  //开始
+  48   1        PCF_IIC_Send_Byte(PCF8563_ADDRESS);//发送器件地址
+  49   1        PCF_IIC_Wait_Ack(); //等待应答
+  50   1        PCF_IIC_Send_Byte(WriteAddr);//发送寄存器地址
+  51   1        PCF_IIC_Wait_Ack();//等待应答
+  52   1        PCF_IIC_Send_Byte(DataToWrite);     //发送字节  
+  53   1        PCF_IIC_Wait_Ack();//等待应答
+C51 COMPILER V9.54   PCF8563                                                               06/07/2022 17:11:51 PAGE 2   
+
+  54   1        PCF_IIC_Stop();//产生一个停止条件 
+  55   1        Delay_ms(10);  
+  56   1      }
+  57          
+  58          /************************************************************
+  59          函数名称：PCF8563_Write_Time
+  60          功    能：向芯片里写时间
+  61          入口参数：无 
+  62          返 回 值：无
+  63          *************************************************************/
+  64          void PCF8563_Write_Time(void)
+  65          {
+  66   1        uint8_t i,temp;
+  67   1        for(i=0;i<8;i++)
+  68   1        {
+  69   2          temp=time_buf1[i]/10;
+  70   2          time_buf[i]=time_buf1[i]%10;
+  71   2          time_buf[i]=time_buf[i]+temp*16;
+  72   2        }
+  73   1        PCF8563_WriteOneByte(CONTROL_STATUS_1,0x20);//关闭时钟
+  74   1        PCF8563_WriteOneByte(PCF8563_YEAR_ADDRESS,time_buf[1]);//年
+  75   1        PCF8563_WriteOneByte(PCF8563_MONTH_ADDRESS,time_buf[2]);//月
+  76   1        PCF8563_WriteOneByte(PCF8563_DAY_ADDRESS,time_buf[3]);//日
+  77   1        PCF8563_WriteOneByte(PCF8563_HOUR_ADDRESS,time_buf[4]);//时
+  78   1        PCF8563_WriteOneByte(PCF8563_MINUTE_ADDRESS,time_buf[5]);//分
+  79   1        PCF8563_WriteOneByte(PCF8563_SECOND_ADDRESS,time_buf[6]);//秒
+  80   1        PCF8563_WriteOneByte(PCF8563_WEEK_ADDRESS,time_buf[7]);//周
+  81   1        PCF8563_WriteOneByte(CONTROL_STATUS_1,0X00);//开始时钟
+  82   1        
+  83   1      }
+  84          
+  85          /************************************************************
+  86          函数名称：PCF8563_Read_Time
+  87          功    能：读取芯片内部的时间
+  88          入口参数：无 
+  89          返 回 值：无
+  90          *************************************************************/
+  91          void PCF8563_Read_Time(void)
+  92          {
+  93   1        uint8_t i,temp;
+  94   1        time_buf[0]=PCF8563_ReadOneByte(PCF8563_YEAR_ADDRESS)&0Xff;
+  95   1        time_buf[2]=PCF8563_ReadOneByte(PCF8563_MONTH_ADDRESS)&0X1F;
+  96   1        time_buf[3]=PCF8563_ReadOneByte(PCF8563_DAY_ADDRESS)&0X3F;
+  97   1        time_buf[4]=PCF8563_ReadOneByte(PCF8563_HOUR_ADDRESS)&0X3F;
+  98   1        time_buf[5]=PCF8563_ReadOneByte(PCF8563_MINUTE_ADDRESS)&0X7F;
+  99   1        time_buf[6]=PCF8563_ReadOneByte(PCF8563_SECOND_ADDRESS)&0X7F;
+ 100   1        time_buf[7]=PCF8563_ReadOneByte(PCF8563_WEEK_ADDRESS)&0X07;
+ 101   1        for(i=0;i<8;i++)
+ 102   1        {
+ 103   2          temp=time_buf[i]/16;
+ 104   2          time_buf1[i]=time_buf[i]%16;
+ 105   2          time_buf1[i]=time_buf1[i]+temp*10;
+ 106   2        }
+ 107   1      }
+ 108          
+ 109          /************************************************************
+ 110          函数名称：PCF8563_LCD_Show_Time
+ 111          功    能：LCD显示时间
+ 112          入口参数：无 
+ 113          返 回 值：无
+ 114          *************************************************************/
+ 115          void PCF8563_LCD_Show_Time(void)
+C51 COMPILER V9.54   PCF8563                                                               06/07/2022 17:11:51 PAGE 3   
+
+ 116          {
+ 117   1          unsigned char buf[25];
+ 118   1          buf[0] = time_buf1[0]/10+48;
+ 119   1          buf[1] = time_buf1[0]%10+48;
+ 120   1          buf[2] = '/';
+ 121   1          buf[3] = time_buf1[2]/10+48;
+ 122   1          buf[4] = time_buf1[2]%10+48;
+ 123   1          buf[5] = '/';
+ 124   1          buf[6] = time_buf1[3]/10+48;
+ 125   1          buf[7] = time_buf1[3]%10+48;
+ 126   1          buf[8] = ' ';
+ 127   1          buf[9] = ' ';
+ 128   1          buf[10] = ' ';
+ 129   1          buf[11] = ' ';
+ 130   1          buf[12] = ' ';   
+ 131   1          buf[13] = ' ';
+ 132   1          buf[14] = ' ';
+ 133   1          buf[15] = ' ';
+ 134   1          buf[16] = time_buf1[4]/10+48;
+ 135   1          buf[17] = time_buf1[4]%10+48;
+ 136   1          buf[18] = ':';
+ 137   1          buf[19] = time_buf1[5]/10+48;
+ 138   1          buf[20] = time_buf1[5]%10+48;
+ 139   1          buf[21] = ':';
+ 140   1          buf[22] = time_buf1[6]/10+48;
+ 141   1          buf[23] = time_buf1[6]%10+48;
+ 142   1          buf[24] = '\0';
+ 143   1          Show_Num(3,1,(char*)(buf));//显示时间 
+ 144   1      
+ 145   1          
+ 146   1      }
+ 147          
+ 148          
+ 149          
+ 150          
+ 151          
+ 152          
+ 153          
+ 154          
+ 155          
+ 156          
+ 157          
+ 158          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    622    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     27      30
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

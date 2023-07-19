@@ -1,0 +1,79 @@
+C51 COMPILER V9.54   ADC0809                                                               06/07/2022 21:15:02 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ADC0809
+OBJECT MODULE PLACED IN .\Objects\adc0809.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\adc0809\adc0809.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\LCD12864;..\HARDWARE\pwm;..\HARDWARE\adc0809) DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -adc0809.lst) TABS(2) OBJECT(.\Objects\adc0809.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "adc0809.h" 
+   3          
+   4          /******************************************************************
+   5          函数名：  ADC0809_Hardware_Init
+   6          功能：  硬件初始化，设置连接芯片的GPIO口
+   7          参数：  无
+   8          返回值：  无
+   9          ******************************************************************/
+  10          void ADC0809_Hardware_Init(void)
+  11          {
+  12   1        P6_Mode_PullUp(PIN_ALL);
+  13   1        P6_Mode_HighZ(PIN_ADC0809_EOC);
+  14   1        P7_Mode_HighZ(PIN_ALL);
+  15   1      }
+  16          
+  17          /******************************************************************
+  18          函数名：  ADC0809_Convert
+  19          功能：  ADC0809模数转化函数
+  20          参数：  无
+  21          返回值：  无
+  22          ******************************************************************/
+  23          uint8_t ADC0809_Convert(uint8_t chlx)
+  24          {
+  25   1        uint8_t temp = 0;
+  26   1        //三个地址线选择通道
+  27   1        _A_((chlx)&0x01);
+  28   1        _B_((chlx>>1)&0x01);
+  29   1        _C_((chlx>>2)&0x01);                    
+  30   1        Delay_us(2);
+  31   1        //记录通道
+  32   1        ADC0809_ALE_SET;
+  33   1        Delay_us(2);
+  34   1        ADC0809_START_SET;
+  35   1        Delay_us(2);
+  36   1        ADC0809_ALE_CLR;
+  37   1        Delay_us(2);
+  38   1        ADC0809_START_CLR;
+  39   1        Delay_us(20);
+  40   1        //等待传递回来的读取信号
+  41   1        while(ADC0809_EOC_READ==1);
+  42   1        //使能端高准备读取
+  43   1        ADC0809_OE_SET;  
+  44   1        Delay_us(150);
+  45   1        //获得采样值
+  46   1        temp=ADC0809_DATA_READ;
+  47   1        Delay_us(50);
+  48   1        //使能端拉低读取完毕
+  49   1        ADC0809_OE_CLR;
+  50   1        //返回采样值
+  51   1        return temp;
+  52   1      }
+
+C51 COMPILER V9.54   ADC0809                                                               06/07/2022 21:15:02 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    148    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

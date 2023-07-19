@@ -1,0 +1,110 @@
+C51 COMPILER V9.54   KEY_4X4                                                               06/07/2022 21:33:08 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE KEY_4X4
+OBJECT MODULE PLACED IN .\Objects\key_4x4.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\KEY_4x4\key_4x4.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\H
+                    -ARDWARE;..\SYSTEM;..\USER;..\HARDWARE\LCD12864;..\HARDWARE\KEY_4x4) DEBUG OBJECTEXTEND PRINT(.\Listings\key_4x4.lst) TAB
+                    -S(2) OBJECT(.\Objects\key_4x4.obj)
+
+line level    source
+
+   1          //*******************************
+   2          //  PE8 ~ PE9行控制线
+   3          //  PE12~PE15列控制线
+   4          
+   5          #include <system.h>
+   6          #include "key_4x4.h"
+   7          
+   8          unsigned char const Key_Tab[4][4]=//键盘编码表
+   9          {
+  10            {'1','4','7','*'},  
+  11            {'2','5','8','0'},  
+  12            {'3','6','9','#'},  
+  13            {'A','B','C','D'} 
+  14          };
+  15          //没有得到键值返回0，否则返回相应的键值
+  16          uint8_t Get_KeyValue(void) //使用PE8~PE15
+  17          {//使用线反转法
+  18   1        
+  19   1        uint8_t i=5,j=5;
+  20   1        uint16_t temp1,temp2;
+  21   1        
+  22   1        P6_Mode_HighZ(PIN_0|PIN_1|PIN_2|PIN_3);
+  23   1        P6_Mode_PullUp(PIN_4|PIN_5|PIN_6|PIN_7);
+  24   1        ClrBits(P6,PIN_4|PIN_5|PIN_6|PIN_7);
+  25   1        if((P6&0xf)!=0xf) //  判断是否有按键按下
+  26   1        {   
+  27   2          Delay_ms(40);                   //按键消抖
+  28   2          if((P6&0xf)!=0xf)
+  29   2          {     
+  30   3            temp1=P6&0xf;          // 读取IDR 
+  31   3            P6_Mode_PullUp(PIN_0|PIN_1|PIN_2|PIN_3);
+  32   3            P6_Mode_HighZ(PIN_4|PIN_5|PIN_6|PIN_7);
+  33   3            ClrBits(P6,PIN_0|PIN_1|PIN_2|PIN_3);
+  34   3            if(((P6>>4)&0xf)!=0xf)  //  判断是否有按键按下
+  35   3            {   
+  36   4              Delay_ms(40);                   //按键消抖
+  37   4              if(((P6>>4)&0xf)!=0xf)        
+  38   4                temp2=(P6>>4)&0xf;          // 读取IDR 
+  39   4              while(((P6>>4)&0xf)==0xf);    //松开按键
+  40   4              switch(temp1)
+  41   4              {
+  42   5                case 0x0e:
+  43   5                  j=0;
+  44   5                  break;                            
+  45   5                case 0x0d:
+  46   5                  j=1;
+  47   5                  break; 
+  48   5                case 0x0b:
+  49   5                  j=2;
+  50   5                  break;
+  51   5                case 0x07:
+  52   5                  j=3;
+  53   5                  break;
+C51 COMPILER V9.54   KEY_4X4                                                               06/07/2022 21:33:08 PAGE 2   
+
+  54   5                default:
+  55   5                  break;
+  56   5              }
+  57   4              switch(temp2)
+  58   4              {
+  59   5                case 0x0e:
+  60   5                  i=0;
+  61   5                  break;                            
+  62   5                case 0x0d:
+  63   5                  i=1;
+  64   5                  break; 
+  65   5                case 0x0b:
+  66   5                  i=2;
+  67   5                  break;
+  68   5                case 0x07:
+  69   5                  i=3;
+  70   5                  break;
+  71   5                default:
+  72   5                  break;
+  73   5              }
+  74   4            }
+  75   3            
+  76   3          }
+  77   2        }
+  78   1        /****************行***********************/ 
+  79   1        if((i==5)||(j==5))
+  80   1          return 0;
+  81   1        else
+  82   1          return (Key_Tab[i][j]);
+  83   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    288    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     16       6
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

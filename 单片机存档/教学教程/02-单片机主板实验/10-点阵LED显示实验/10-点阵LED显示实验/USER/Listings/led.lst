@@ -1,0 +1,42 @@
+C51 COMPILER V9.54   LED                                                                   06/07/2022 16:45:05 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\led.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\HARDWARE\16x16\led.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWAR
+                    -E;..\SYSTEM;..\USER;..\HARDWARE\16x16) DEBUG OBJECTEXTEND PRINT(.\Listings\led.lst) TABS(2) OBJECT(.\Objects\led.obj)
+
+line level    source
+
+   1          #include "led.h"
+   2          
+   3          
+   4          void LED_Init(void)
+   5          {
+   6   1        P0M1 = 0x00;
+   7   1        P0M0 = 0xff;
+   8   1        
+   9   1        P1M1 = 0x00;
+  10   1        P1M0 = 0xff;
+  11   1        
+  12   1        P2M1 = 0x00;
+  13   1        P2M0 = 0xff;
+  14   1        
+  15   1        P3M1 = 0x00;
+  16   1        P3M0 = 0xff;
+  17   1        
+  18   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     22    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

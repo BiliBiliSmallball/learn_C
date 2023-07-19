@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\System.obj",
+".\Objects\key.obj",
+".\Objects\lcd12864.obj",
+".\Objects\infrared.obj",
+".\Objects\pwm.obj" 
+TO ".\Objects\TEST" 
+PRINT(".\Listings\TEST.m51") RAMSIZE(256) 

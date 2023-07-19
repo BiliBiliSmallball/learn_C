@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\System.obj",
+".\Objects\key.obj",
+".\Objects\lcd12864.obj",
+".\Objects\93C46.obj" 
+TO ".\Objects\TEST" 
+PRINT(".\Listings\TEST.m51") RAMSIZE(256) 

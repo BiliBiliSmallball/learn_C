@@ -1,0 +1,213 @@
+C51 COMPILER V9.54   IIC                                                                   06/29/2022 17:51:34 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE IIC
+OBJECT MODULE PLACED IN .\Objects\IIC.obj
+COMPILER INVOKED BY: D:\Software\C51\BIN\C51.EXE ..\HARDWARE\24C02\IIC.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\HARDWA
+                    -RE;..\SYSTEM;..\USER;..\HARDWARE\key;..\HARDWARE\24C02;..\HARDWARE\LCD12864) DEBUG OBJECTEXTEND PRINT(.\Listings\IIC.lst
+                    -) OBJECT(.\Objects\IIC.obj)
+
+line level    source
+
+   1          #include "system.h"
+   2          #include "iic.h"
+   3          
+   4          /*************************************************
+   5          函数名称：IIC_Hardware_Init
+   6          函数说明：IIC初始化     
+   7          输入参数：      无                      
+   8          返 回 值：      无                      
+   9          **************************************************/
+  10          void IIC_Hardware_Init(void)
+  11          {
+  12   1      
+  13   1          P2_Mode_OUT_PP(IIC_SCL_PIN | IIC_SDA_PIN);
+  14   1      
+  15   1          IIC_SCL(1);
+  16   1          IIC_SDA(1);
+  17   1      }
+  18          
+  19          /*************************************************
+  20          函数名称：SDA_In
+  21          函数说明：IIC输入配置   
+  22          输入参数：      无                      
+  23          返 回 值：      无                      
+  24          **************************************************/
+  25          void SDA_In(void)
+  26          {
+  27   1          P2_Mode_PullUp(IIC_SDA_PIN);
+  28   1      }
+  29          
+  30          /*************************************************
+  31          函数名称：SDA_Out
+  32          函数说明：IIC输出配置   
+  33          输入参数：      无                      
+  34          返 回 值：      无                      
+  35          **************************************************/
+  36          void SDA_Out(void)
+  37          {
+  38   1          P2_Mode_OUT_OD(IIC_SDA_PIN);
+  39   1      }
+  40          
+  41          /*************************************************
+  42          函数名称：IIC_Start
+  43          函数说明：产生IIC起始信号
+  44          输入参数：      无                      
+  45          返 回 值：      无                      
+  46          **************************************************/
+  47          void IIC_Start(void)
+  48          {
+  49   1          SDA_Out();     //sda线输出
+  50   1          IIC_SDA(1);
+  51   1          IIC_SCL(1);
+  52   1          Delay_us(4);
+  53   1          IIC_SDA(0);//START:when CLK is high,DATA change form high to low
+C51 COMPILER V9.54   IIC                                                                   06/29/2022 17:51:34 PAGE 2   
+
+  54   1          Delay_us(4);
+  55   1          IIC_SCL(0);//钳住I2C总线，准备发送或接收数据
+  56   1      }
+  57          
+  58          /*************************************************
+  59          函数名称：IIC_Stop
+  60          函数说明：产生IIC停止信号
+  61          输入参数：      无                      
+  62          返 回 值：      无                      
+  63          **************************************************/
+  64          void IIC_Stop(void)
+  65          {
+  66   1          SDA_Out();          //sda线输出
+  67   1          IIC_SCL(0);
+  68   1          IIC_SDA(0);         //STOP:when CLK is high DATA change form low to high
+  69   1          Delay_us(4);
+  70   1          IIC_SCL(1);
+  71   1          IIC_SDA(1);         //发送I2C总线结束信号
+  72   1          Delay_us(4);
+  73   1      }
+  74          
+  75          /**********************************************************
+  76          *功    能：等待应答信号到来
+  77          *参    数：无
+  78          *返 回 值：1/接收应答失败；0/接收应答成功
+  79          **********************************************************/
+  80          uint8_t IIC_Wait_Ack(void)
+  81          {
+  82   1          uint8_t ucErrTime = 0;
+  83   1          SDA_In();      //SDA设置为输入
+  84   1          IIC_SDA(1);
+  85   1          Delay_us(1);
+  86   1          IIC_SCL(1);
+  87   1          Delay_us(1);
+  88   1      
+  89   1          while(READ_SDA)
+  90   1          {
+  91   2              ucErrTime++;
+  92   2      
+  93   2              if(ucErrTime > 250)
+  94   2              {
+  95   3                  IIC_Stop();
+  96   3                  return 1;
+  97   3              }
+  98   2          }
+  99   1      
+ 100   1          IIC_SCL(0);//时钟输出0
+ 101   1          return 0;
+ 102   1      }
+ 103          
+ 104          //产生ACK应答
+ 105          void IIC_Ack(void)
+ 106          {
+ 107   1          IIC_SCL(0);
+ 108   1          SDA_Out();
+ 109   1          IIC_SDA(0);
+ 110   1          Delay_us(2);
+ 111   1          IIC_SCL(1);
+ 112   1          Delay_us(2);
+ 113   1          IIC_SCL(0);
+ 114   1      }
+ 115          
+C51 COMPILER V9.54   IIC                                                                   06/29/2022 17:51:34 PAGE 3   
+
+ 116          //不产生ACK应答
+ 117          void IIC_NAck(void)
+ 118          {
+ 119   1          IIC_SCL(0);
+ 120   1          SDA_Out();
+ 121   1          IIC_SDA(1);
+ 122   1          Delay_us(2);
+ 123   1          IIC_SCL(1);
+ 124   1          Delay_us(2);
+ 125   1          IIC_SCL(0);
+ 126   1      }
+ 127          
+ 128          /**********************************************************
+ 129          *功    能：IIC发送一个字节
+ 130          *参    数：txd
+ 131          *返 回 值：无
+ 132          **********************************************************/
+ 133          void IIC_Send_Byte(uint8_t txd)
+ 134          {
+ 135   1          uint8_t t;
+ 136   1          SDA_Out();
+ 137   1          IIC_SCL(0);//拉低时钟开始数据传输
+ 138   1      
+ 139   1          for(t = 0; t < 8; t++)
+ 140   1          {
+ 141   2              IIC_SDA(((txd & 0x80) >> 7));
+ 142   2              txd <<= 1;
+ 143   2              Delay_us(2);   //对TEA5767这三个延时都是必须的
+ 144   2              IIC_SCL(1);
+ 145   2              Delay_us(2);
+ 146   2              IIC_SCL(0);
+ 147   2              Delay_us(2);
+ 148   2          }
+ 149   1      }
+ 150          
+ 151          //读1个字节，ack=1时，发送ACK，ack=0，发送nACK
+ 152          uint8_t IIC_Read_Byte(unsigned char ack)
+ 153          {
+ 154   1          unsigned char i, receive = 0;
+ 155   1          SDA_In();//SDA设置为输入
+ 156   1      
+ 157   1          for(i = 0; i < 8; i++ )
+ 158   1          {
+ 159   2              IIC_SCL(0);
+ 160   2              Delay_us(2);
+ 161   2              IIC_SCL(1);
+ 162   2              receive <<= 1;
+ 163   2      
+ 164   2              if(READ_SDA)receive++;
+ 165   2      
+ 166   2              Delay_us(1);
+ 167   2          }
+ 168   1      
+ 169   1          if (!ack)
+ 170   1              IIC_NAck();//发送nACK
+ 171   1          else
+ 172   1              IIC_Ack(); //发送ACK
+ 173   1      
+ 174   1          return receive;
+ 175   1      }
+ 176          
+ 177          
+C51 COMPILER V9.54   IIC                                                                   06/29/2022 17:51:34 PAGE 4   
+
+ 178          
+ 179          
+ 180          
+ 181          
+ 182          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    366    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       6
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1 @@
+"..\HARDWARE\exti\exti.c" LARGE OPTIMIZE (8,SPEED) BROWSE INCDIR(..\HARDWARE;..\SYSTEM;..\USER;..\HARDWARE\led;..\HARDWARE\exti) DEBUG OBJECTEXTEND PRINT(.\Listings\exti.lst) TABS (2) OBJECT(.\Objects\exti.obj)
