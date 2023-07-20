@@ -40,13 +40,21 @@ void panduan(){
     printf("结果1为:%d,\n结果2为:%d,\n结果3为:%d\n结果4为：%d;\n",a,b,c,d);
 }
 
-//
+//短路求值
+void pull(){
+    int a=3,b=3;//同种类型的变量可以直接连等
+    (a = 0) && (b=5);   //这里左侧已经被判定为"0",所以右侧就直接不进行赋值.
+    printf("a = %d,b = %d\n",a,b);
+    (a=1) || (b = 5);
+    printf("a = %d,b = %d\n",a,b);
+}
 
 
 //看结果
 int main(){
     Compare();
     panduan();
+    pull();
     system("pause");
     return 0;
 }
