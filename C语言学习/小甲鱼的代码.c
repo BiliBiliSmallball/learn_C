@@ -1,4 +1,4 @@
-//Ğ¡¼×ÓãÍ³¼Æ´úÂëÁ¿µÄ³ÌĞò
+//å°ç”²é±¼ç»Ÿè®¡ä»£ç é‡çš„ç¨‹åº
 
 #include <io.h>
 #include <direct.h>
@@ -22,7 +22,7 @@ int countlines(const char *filename)
 	
 	if ((fp= fopen(filename,"r")) == NULL)
 	{
-		fprintf(stderr,"ÎŞ·¨´ò¿ªÎÄ¼ş:%s\n",filename);
+		fprintf(stderr,"æ— æ³•æ‰“å¼€æ–‡ä»¶:%s\n",filename);
 		return 0;
 	}
 	
@@ -91,12 +91,12 @@ int main()
 {
     char path[MAX] = ".";
         
-    printf("¼ÆËãÖĞ...\n");
+    printf("è®¡ç®—ä¸­...\n");
         
     findAllCodes(path);
     findAllDirs(path);
         
-    printf("Ä¿Ç°Äã×Ü¹²Ğ´ÁË %ld ĞĞ´úÂë£¡\n\n", total);
+    printf("ç›®å‰ä½ æ€»å…±å†™äº† %ld è¡Œä»£ç ï¼\n\n", total);
     system("pause");
         
     return 0;		

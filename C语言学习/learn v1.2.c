@@ -1,37 +1,37 @@
 /*
-µÚÈý½Ú¿Î:
-1.±êÊ¶·û£ºsizeof
-2.×Ö·û/×Ö·û´®/ASCIIÂë¡£
+ç¬¬ä¸‰èŠ‚è¯¾:
+1.æ ‡è¯†ç¬¦ï¼šsizeof
+2.å­—ç¬¦/å­—ç¬¦ä¸²/ASCIIç ã€‚
 */
 
-//sizeof(Ãû³Æ)   ÓÃÀ´²é¿´Êý¾ÝÌå´óÐ¡£¨ËùÕ¼³ß´ç£©
-//Ò»¶¨Òª¸úprintfÒ»ÆðÓÃ
+//sizeof(åç§°)   ç”¨æ¥æŸ¥çœ‹æ•°æ®ä½“å¤§å°ï¼ˆæ‰€å å°ºå¯¸ï¼‰
+//ä¸€å®šè¦è·Ÿprintfä¸€èµ·ç”¨
 
 #include<stdio.h>
 #include<math.h>
 
 void _Sizeof(){
-    char a = 'A';//¶¨ÒåÒ»¸öcharÀàÐÍµÄ±äÁ¿a
-    printf("aµÄÀàÐÍÊÇ%d",sizeof(a));
+    char a = 'A';//å®šä¹‰ä¸€ä¸ªcharç±»åž‹çš„å˜é‡a
+    printf("açš„ç±»åž‹æ˜¯%d",sizeof(a));
 }
 
-//³Ë·½º¯Êýpwo()
+//ä¹˜æ–¹å‡½æ•°pwo()
 void cf(){
     int result = pow(2,5) + 3;
-    printf("±äÁ¿ result µÄ½á¹ûÎª%d,\n´óÐ¡Îª%d" , result,sizeof result); 
-    //return 0;  															Äãº¯ÊýÐ´void(ÎÞ·µ»ØÖµÄãreturnÉ¶£¿) 
+    printf("å˜é‡ result çš„ç»“æžœä¸º%d,\nå¤§å°ä¸º%d" , result,sizeof result); 
+    //return 0;  															ä½ å‡½æ•°å†™void(æ— è¿”å›žå€¼ä½ returnå•¥ï¼Ÿ) 
 }
 
-//×Ö·û
-//±¾ÖÊÉÏ¾ÍÊÇÀûÓÃASCIIÂë½øÐÐ½»´úµÄ¶«Î÷,ASCIIÂëÊÇ16½øÖÆ
-//00¿Õ£¨\0£©;01±êÌâ;02-03:ÎÄ±¾;ÏìÁå07£»»Ø³µ0D£»7F£ºÉ¾³ý£»
-//30-39£º0-9£»41-5A£º´óÐ´A_Z £»62-7A£ºÐ¡Ð´a-z£»
+//å­—ç¬¦
+//æœ¬è´¨ä¸Šå°±æ˜¯åˆ©ç”¨ASCIIç è¿›è¡Œäº¤ä»£çš„ä¸œè¥¿,ASCIIç æ˜¯16è¿›åˆ¶
+//00ç©ºï¼ˆ\0ï¼‰;01æ ‡é¢˜;02-03:æ–‡æœ¬;å“é“ƒ07ï¼›å›žè½¦0Dï¼›7Fï¼šåˆ é™¤ï¼›
+//30-39ï¼š0-9ï¼›41-5Aï¼šå¤§å†™A_Z ï¼›62-7Aï¼šå°å†™a-zï¼›
 void str(){
 	char a = 75;
 	printf("%c = %d\n",a,a);
 } 
 
-//¿´½á¹û
+//çœ‹ç»“æžœ
 int main(){
     _Sizeof();
     printf("\n"); 
