@@ -1,33 +1,33 @@
 /*
-µÚ¶þ½Ú¿Î:
-1.³£Á¿
-2.»ù±¾ÀàÐÍ
-3.Í¨Åä¶ÔÓ¦
+ç¬¬äºŒèŠ‚è¯¾:
+1.å¸¸é‡
+2.åŸºæœ¬ç±»åž‹
+3.é€šé…å¯¹åº”
 */
-//³£Á¿:ÓÃ#define [±êÊ¶·û£¨±äÁ¿Ãû)] [±äÁ¿ÄÚÈÝ]À´½øÐÐ¶¨Òå£¬
-//Ã»ÓÐÖ¸¶¨ÀàÐÍ
-//µ±ÄãÔÚÕâÀï¶¨ÒåÒ»¸ö×Ö·û´®Ê±£¬ÏÂÃæµÄÍ¬Ãû±äÁ¿Èç¹ûÃ»ÓÐÔÙ´ÎÉùÃ÷£¬¶¼ÊÇÕâ¸öÁ¿
+//å¸¸é‡:ç”¨#define [æ ‡è¯†ç¬¦ï¼ˆå˜é‡å)] [å˜é‡å†…å®¹]æ¥è¿›è¡Œå®šä¹‰ï¼Œ
+//æ²¡æœ‰æŒ‡å®šç±»åž‹
+//å½“ä½ åœ¨è¿™é‡Œå®šä¹‰ä¸€ä¸ªå­—ç¬¦ä¸²æ—¶ï¼Œä¸‹é¢çš„åŒåå˜é‡å¦‚æžœæ²¡æœ‰å†æ¬¡å£°æ˜Žï¼Œéƒ½æ˜¯è¿™ä¸ªé‡
 #include<stdio.h> 
 
-#define URL "ÎÒÊÇÒ»´®×Ö·û¡£"
+#define URL "æˆ‘æ˜¯ä¸€ä¸²å­—ç¬¦ã€‚"
 #define NB 111
-#define longger "ÄãºÃ"//ÕâÖÖÊÇ²»¶ÔµÄÐ´·¨-->   #define longger int 10
+#define longger "ä½ å¥½"//è¿™ç§æ˜¯ä¸å¯¹çš„å†™æ³•-->   #define longger int 10
 
 void _define(){
-    printf("ÎÒÒª´òµÄÊÇ£º¡®%s¡¯",longger);//ÕâÀïÎÒÃ»ÓÐÔÚº¯ÊýÀïÃæ¶¨Òålongger£¬µ«ÊÇÒòÎªÇ°ÃæÈ«¾ÖÒÑ¾­Ð´ÁË
+    printf("æˆ‘è¦æ‰“çš„æ˜¯ï¼šâ€˜%sâ€™",longger);//è¿™é‡Œæˆ‘æ²¡æœ‰åœ¨å‡½æ•°é‡Œé¢å®šä¹‰longgerï¼Œä½†æ˜¯å› ä¸ºå‰é¢å…¨å±€å·²ç»å†™äº†
 }
 
-// »ù±¾Êý¾ÝÀàÐÍ
-// °üÀ¨ÕûÐÍ£¨int£©¡¢×Ö·ûÐÍ£¨char£©¡¢¸¡µãÐÍ£¨float£©ºÍË«¾«¶È¸¡µãÐÍ£¨double£©£¬_BoolÀàÐÍ¡£
-// 3.Ö¸ÕëÖ¸Ïò void
-// ³¤¶Ì
-// ³¤ÐÍ£¨long£©£¬¶ÌÐÍ(short)
-// ÌØÊâµÄ¹Ø¼ü´Ê£º unsigned
-// ²»¹ÜÊ²Ã´ÀàÐÍ£¬Ç°Ãæ¼Óunsigned¾ÍÃ»ÓÐ¸ºÊýÐÎÊ½¡£
-// ÒÔ¼°£¬ÔÚÃ»ÓÐinsignedµÄÇé¿öÏÂ£¬Ò»¸ö±äÁ¿µÄµÚÒ»±ÈÌØÎ»ÊÇ·ûºÅÎ»
+// åŸºæœ¬æ•°æ®ç±»åž‹
+// åŒ…æ‹¬æ•´åž‹ï¼ˆintï¼‰ã€å­—ç¬¦åž‹ï¼ˆcharï¼‰ã€æµ®ç‚¹åž‹ï¼ˆfloatï¼‰å’ŒåŒç²¾åº¦æµ®ç‚¹åž‹ï¼ˆdoubleï¼‰ï¼Œ_Boolç±»åž‹ã€‚
+// 3.æŒ‡é’ˆæŒ‡å‘ void
+// é•¿çŸ­
+// é•¿åž‹ï¼ˆlongï¼‰ï¼ŒçŸ­åž‹(short)
+// ç‰¹æ®Šçš„å…³é”®è¯ï¼š unsigned
+// ä¸ç®¡ä»€ä¹ˆç±»åž‹ï¼Œå‰é¢åŠ unsignedå°±æ²¡æœ‰è´Ÿæ•°å½¢å¼ã€‚
+// ä»¥åŠï¼Œåœ¨æ²¡æœ‰insignedçš„æƒ…å†µä¸‹ï¼Œä¸€ä¸ªå˜é‡çš„ç¬¬ä¸€æ¯”ç‰¹ä½æ˜¯ç¬¦å·ä½
 
 
-// enum:Ã¶¾ÙÀàÐÍ
+// enum:æžšä¸¾ç±»åž‹
 enum DAY
 {
       MON=1, TUE, WED, THU, FRI, SAT, SUN
@@ -42,29 +42,29 @@ void Get_Day()
 }
 
 
-//void ÀàÐÍÖ¸¶¨Ã»ÓÐ¿ÉÓÃµÄÖµ¡£ËüÍ¨³£ÓÃÓÚÒÔÏÂÈýÖÖÇé¿öÏÂ£º
-// 1.º¯Êý·µ»ØÎª¿Õ
-// ÖÐÓÐ¸÷ÖÖº¯Êý¶¼²»·µ»ØÖµ£¬»òÕßÄú¿ÉÒÔËµËüÃÇ·µ»Ø¿Õ¡£²»·µ»ØÖµµÄº¯ÊýµÄ·µ»ØÀàÐÍÎª¿Õ¡£ÀýÈç void exit (int status);
-// 2.º¯Êý²ÎÊýÎª¿Õ
-// ÖÐÓÐ¸÷ÖÖº¯Êý²»½ÓÊÜÈÎºÎ²ÎÊý¡£²»´ø²ÎÊýµÄº¯Êý¿ÉÒÔ½ÓÊÜÒ»¸ö void¡£ÀýÈç int rand(void);
+//void ç±»åž‹æŒ‡å®šæ²¡æœ‰å¯ç”¨çš„å€¼ã€‚å®ƒé€šå¸¸ç”¨äºŽä»¥ä¸‹ä¸‰ç§æƒ…å†µä¸‹ï¼š
+// 1.å‡½æ•°è¿”å›žä¸ºç©º
+// ä¸­æœ‰å„ç§å‡½æ•°éƒ½ä¸è¿”å›žå€¼ï¼Œæˆ–è€…æ‚¨å¯ä»¥è¯´å®ƒä»¬è¿”å›žç©ºã€‚ä¸è¿”å›žå€¼çš„å‡½æ•°çš„è¿”å›žç±»åž‹ä¸ºç©ºã€‚ä¾‹å¦‚ void exit (int status);
+// 2.å‡½æ•°å‚æ•°ä¸ºç©º
+// ä¸­æœ‰å„ç§å‡½æ•°ä¸æŽ¥å—ä»»ä½•å‚æ•°ã€‚ä¸å¸¦å‚æ•°çš„å‡½æ•°å¯ä»¥æŽ¥å—ä¸€ä¸ª voidã€‚ä¾‹å¦‚ int rand(void);
 
 void Date_signed(){
     int a = 1111;
     double time = 213123221312313.23123213123123;
     unsigned int as = 1123213.3424;
     long double _init = 123123123.43952890387;
-    printf("µÚÒ»¸ö%s,µÚ¶þ¸ö%s,µÚÈý¸ö%d",a,time,as); 
+    printf("ç¬¬ä¸€ä¸ª%s,ç¬¬äºŒä¸ª%s,ç¬¬ä¸‰ä¸ª%d",a,time,as); 
 }
 
 
-// ¿´½á¹û
+// çœ‹ç»“æžœ
 int main(){
-    _define();//³£Á¿
-    Date_signed();//Êý¾ÝÀàÐÍ
-    Get_Day();//Ã¶¾ÙÀàÐÍËµÃ÷
+    _define();//å¸¸é‡
+    Date_signed();//æ•°æ®ç±»åž‹
+    Get_Day();//æžšä¸¾ç±»åž‹è¯´æ˜Ž
     system("pause");
     return 0;
 }
 
-//[Warning] incompatible implicit declaration of built-in function ¡®scanf¡¯ [enabled by default]
-//´íÎóÔ­Òò£¬Î´ÉùÃ÷ #include<stdio.h> Í·ÎÄ¼þ £¬¾ÍÊ¹ÓÃÍ·ÎÄ¼þÖÐµÄ printf º¯Êý
+//[Warning] incompatible implicit declaration of built-in function â€˜scanfâ€™ [enabled by default]
+//é”™è¯¯åŽŸå› ï¼Œæœªå£°æ˜Ž #include<stdio.h> å¤´æ–‡ä»¶ ï¼Œå°±ä½¿ç”¨å¤´æ–‡ä»¶ä¸­çš„ printf å‡½æ•°

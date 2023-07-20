@@ -5,7 +5,7 @@ int main(void)
 	int i, num;
 	_Bool flag = 1;
 	
-	printf("请输入一个整数；");
+	printf("璇疯緭鍏ヤ竴涓暣鏁帮紱");
 	scanf("%d", &num);
 	
 	for (i = 2; i <= num / 2; i++)
@@ -18,11 +18,11 @@ int main(void)
 
 	if (flag)
 	{
-		printf("%d是一个素数；\n",num);
+		printf("%d鏄竴涓礌鏁帮紱\n",num);
 	}
 	else
 	{
-		printf("%d不是一个素数；\n,num");
+		printf("%d涓嶆槸涓�涓礌鏁帮紱\n,num");
 	}
 	return 0;
 }
