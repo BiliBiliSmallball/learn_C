@@ -11,16 +11,15 @@
 // }
 
 #include<stdio.h>
-
 int i;
 scanf("请输入一个数字:%d",&i);
 int main(){
     while ( i <= 100)
     {
-       i++
-       printf("现在的i为: %d",i)
+       i++;
+       printf("现在的i为: %d",i);
     }
-
-    
+    system("pause");
+	return 0;
 }
 
