@@ -1,35 +1,35 @@
 /***************************
-ç¬¬ä¸€ä¸ªç¨‹åº 
-1.ç»“æž„
-å¤´æ–‡ä»¶
-ä¸»å‡½æ•°{
+µÚÒ»¸ö³ÌÐò 
+1.½á¹¹
+Í·ÎÄ¼þ
+Ö÷º¯Êý{
 	return 0
 }
 
-2.è½¬ä¹‰å­—ç¬¦
-\n æ¢è¡Œ  \aå“é“ƒ \tåˆ¶è¡¨ç¬¦  \våˆ¶è¡¨ç¬¦  \rå›žè½¦  \båˆ é™¤ä¸€ä¸ªå­—ç¬¦ å•ç‹¬ä¸€ä¸ªâ€œ/â€è¡¨ç¤ºæ¢è¡Œ
+2.×ªÒå×Ö·û
+\n »»ÐÐ  \aÏìÁå \tÖÆ±í·û  \vÖÆ±í·û  \r»Ø³µ  \bÉ¾³ýÒ»¸ö×Ö·û µ¥¶ÀÒ»¸ö¡°/¡±±íÊ¾»»ÐÐ
 ***************************/
-#include <iostream>//åº“ï¼Œä»¥#includeå£°æ˜Ž
+#include <iostream>//¿â£¬ÒÔ#includeÉùÃ÷
 #include <studio.h>
 
-//è½¬ä¹‰å­—ç¬¦ï¼š
-//\n æ¢è¡Œ  \aå“é“ƒ \tåˆ¶è¡¨ç¬¦  \våˆ¶è¡¨ç¬¦  \rå›žè½¦  \båˆ é™¤ä¸€ä¸ªå­—ç¬¦ å•ç‹¬ä¸€ä¸ªâ€œ/â€è¡¨ç¤ºæ¢è¡Œ
+//×ªÒå×Ö·û£º
+//\n »»ÐÐ  \aÏìÁå \tÖÆ±í·û  \vÖÆ±í·û  \r»Ø³µ  \bÉ¾³ýÒ»¸ö×Ö·û µ¥¶ÀÒ»¸ö¡°/¡±±íÊ¾»»ÐÐ
 void less1(){
-	printf("ç¬¬ä¸€ä¸ª\tï¼Œç¬¬äºŒä¸ª\n,ç¬¬ä¸‰ä¸ª\v,ç¬¬å››ä¸ª\rï¼Œç¬¬äº”ä¸ª,,\b\n");
+	printf("µÚÒ»¸ö\t£¬µÚ¶þ¸ö\n,µÚÈý¸ö\v,µÚËÄ¸ö\r£¬µÚÎå¸ö,,\b\n");
 }
 
 
 
-int main()//ä¸»å‡½æ•°
+int main()//Ö÷º¯Êý
 {
-	int a;//å˜é‡å®šä¹‰
-	be = 100;//å˜é‡è¡¨è¿°
-	printf("æˆ‘æœ‰ %f å…ƒ\n",be);//æ ¼å¼åŒ–è¾“å‡º
-	printf("ä½ å¹²å˜›ï¼~ å“Žå‘¦~\n");//è°ƒç”¨printfå‡½æ•°è¾“å‡º
-	less1();//è°ƒç”¨å‡½æ•°ï¼ˆè·Ÿpyä¸€æ ·ï¼‰
-	system("pause");//å†»ç»“çª—å£ 
+	int a;//±äÁ¿¶¨Òå
+	be = 100;//±äÁ¿±íÊö
+	printf("ÎÒÓÐ %f Ôª\n",be);//¸ñÊ½»¯Êä³ö
+	printf("Äã¸ÉÂï£¡~ °¥ßÏ~\n");//µ÷ÓÃprintfº¯ÊýÊä³ö
+	less1();//µ÷ÓÃº¯Êý£¨¸úpyÒ»Ñù£©
+	system("pause");//¶³½á´°¿Ú 
 	return 0;
 }
 /*
-è½¬æ¢ç¬¦ï¼šåœ¨printf()ä¸­ç”¨äºŽæ ¼å¼åŒ–å„ç±»å­—ç¬¦çš„
+×ª»»·û£ºÔÚprintf()ÖÐÓÃÓÚ¸ñÊ½»¯¸÷Àà×Ö·ûµÄ
 */
