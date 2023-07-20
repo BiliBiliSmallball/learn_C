@@ -72,6 +72,9 @@ Markdown 代码
 
 链接
 [链接名称](链接地址)
+
+图片
+！[图片注释](连接位置)
 #### 特技
 
 1.  使用 Readme_XXX.md 来支持不同的语言，例如 Readme_en.md, Readme_zh.md

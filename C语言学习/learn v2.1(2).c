@@ -1,24 +1,57 @@
 /*
-ç¬¬å…­èŠ‚è¯¾ï¼ˆç®—æ³•è¯¾ï¼‰:
-1.if(ä¸‰ç§)
+µÚÁù½Ú¿Î£¨Ëã·¨¿Î£©:
+1.if(ÈýÖÖ)
 2.while
 3.switch
 */ 
 
-//while (è¡¨è¾¾å¼)
+#include<stdio.h>
+// ifµÄ±í´ï·½Ê½ÓÐÈýÖÖ,Ðü¹ÒÊ½,Ìõ¼þÅÐ¶Ï,Õý·´Í¨ÓÃ.
+// if (±í´ïÊ½[Ìõ¼þ])
 // {
-//     ä»£ç 
+//     Ö´ÐÐ´úÂë
 // }
 
-#include<stdio.h>
+// if (±í´ïÊ½[Ìõ¼þ])
+// {
+//     Ö´ÐÐ´úÂë
+// }
+// else
+// {
+//     Ö´ÐÐ´úÂë
+// }
 
-int i;
-scanf("è¯·è¾“å…¥ä¸€ä¸ªæ•°å­—:%d",&i);
+// if (±í´ïÊ½1[Ìõ¼þ])
+// {
+//     Ö´ÐÐ´úÂë
+// }
+// else if (±í´ïÊ½2[Ìõ¼þ])
+// {
+//     Ö´ÐÐ´úÂë
+// }
+// else
+// {
+//     Ö´ÐÐ´úÂë
+// }
+
 int main(){
-    while ( i <= 100)
+    unsigned int i;
+    printf("ÇëÊäÈëÄúµÄÄêÁä");
+    scanf("%d",&i);
+    if ( i >= 18)
     {
-       i++
-       printf("çŽ°åœ¨çš„iä¸º: %d",i)
+        printf("ÒÑ¾­³ÉÄê,»¶Ó­À´µ½¶¯ÎïÊÀ½ç."); 
     }
-}
 
+    else if (i < 18)
+    {
+        printf("Ì«Ð¡À²"); 
+    }
+    else
+    {
+      printf("Äãµ½µ×¼¸Ëê?"); 
+    }      
+    
+    system("pause");
+    return 0;
+}
