@@ -14,9 +14,10 @@
 //     代码
 //}
 void first(){
-    for (int i = 0; i < 50; i++)
+	int i;
+    for (i = 0; i < 50; i++)
     {
-        printf("现在是%d",i);
+        printf("现在是%d\n",i);
     }
     //for的三个参数都可以省略。
 }
@@ -41,20 +42,28 @@ void first(){
 //     break;
 // }
 void secend(){
-    int a = 1;
+    int i = 1;
     while (i <=10 )
     {
     i++;
     switch (i){
         case 5:
-            printf("现在是5")
+            printf("现在是5\n");
             break;
         case 10:
-            printf("现在是10")
+            printf("现在是10\n");
             break;
         default:
-            printf("程序运行结束")
+            printf("还没到5或者10哦\n");
             break;
         }
     } 
+}
+
+
+int main(){
+	first();
+	secend();
+	system("pause");
+	return 0;
 }
