@@ -52,6 +52,11 @@ DLC
 
 6. [math.h库](https://www.runoob.com/cprogramming/c-standard-library-math-h.html)
 ![](./img/math.png)
+
+7. [微软教程](https://learn.microsoft.com/zh-cn/cpp/preprocessor/hash-if-hash-elif-hash-else-and-hash-endif-directives-c-cpp?view=msvc-170)
+![](./img/Microsoft.png)
+
+---
 ## 贡献名单
 1. __*Ender_Zhu（其实就是我啦）*__
 2. **华凯TU**

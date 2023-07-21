@@ -12,7 +12,9 @@
 
 #include<stdio.h>
 int i;
-scanf("请输入一个数字:%d",&i);
+printf("请输入一个数字:");
+scanf("%d",&i);
+
 int main(){
     while ( i <= 100)
     {
