@@ -1,28 +1,21 @@
+//对应learn3.0.c里面的内容
 #include <stdio.h>
-#include <stdbool.h>
-int main(void)
-{
-	int i, num;
-	_Bool flag = 1;
-	
-	printf("璇疯緭鍏ヤ竴涓暣鏁帮紱");
-	scanf("%d", &num);
-	
-	for (i = 2; i <= num / 2; i++)
-	{
-		if (num % i == 0)
-		{
-			   flag = 0;
-		}
-	}
+#define NUM 10//一共10位，先定好
 
-	if (flag)
-	{
-		printf("%d鏄竴涓礌鏁帮紱\n",num);
-	}
-	else
-	{
-		printf("%d涓嶆槸涓�涓礌鏁帮紱\n,num");
-	}
-	return 0;
+int main(){
+    int s[NUM];
+    int i, sum = 0;
+    for (i = 0; i < NUM; i++)
+    {
+        printf("请输入第%d位同学的成绩： \n", i + 1);
+        scanf("%d",&s[i]);
+        while(s[i] > 100 || s[i] < 0)
+		{
+        	printf("你输入正确的成绩了吗?\n");//条件判断
+            scanf("%d",&s[i]);
+		}
+	    sum += s[i];
+    }
+    printf("成绩录入完毕！本次考试的平均分是： %.3f\n",(double)sum / NUM);
+    return 0;
 }
