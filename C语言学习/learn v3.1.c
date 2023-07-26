@@ -1,45 +1,52 @@
-#include<studio.h>
+#include<stdio.h>
 /*********************
-第八课:
-本节课就是纯纯的字符串的各种骚操作
+�ڰ˿�:
+���ڿξ��Ǵ������ַ����ĸ���ɧ����
 
-注意：先导入库：#include<string.h>
+ע�⣺�ȵ���⣺#include<string.h>
 *********************/ 
 #include<string.h>
-char exp1[] = {"义演丁镇，鉴定为：说藏话的唐式小丑\0"};
-char exp2[] = {"对镜子倾诉心事，这现实有些讽刺，讽刺的是没考试就有编制，\
-于是我拆封电子，把故事装进盒子，盒子里是用纯真换的无知，\
-我的心炽热，肺却冰冷着，其实我想抽，但不敢对你说，歌词的字我认不得几个，可为何总是让我当个rapper？\
+char exp1[] = {"���ݶ��򣬼���Ϊ��˵�ػ�����ʽС��\0"};
+char exp2[] = {"�Ծ����������£�����ʵ��Щ���̣����̵���û���Ծ��б��ƣ�\
+�����Ҳ����ӣ��ѹ���װ�����ӣ����������ô��滻����֪��\
+�ҵ��ĳ��ȣ���ȴ�����ţ���ʵ����飬�����Ҷ���˵����ʵ������ϲ��ü�������Ϊ���������ҵ���rapper��\
 \
-可是雪豹已失联，摘不下我虚伪的假面，\
-几句胡言被奉为圣箴，抽一口你血汗的香甜，\
-可是钱飘进双眼，模糊了我做人的底线，\
-心甘情愿舍弃了尊严，烧一朵花圈做祭奠​ 。\
-烟 distance"};
+����ѩ����ʧ����ժ��������α�ļ��棬\
+������Ա���Ϊʥ�𣬳�һ����Ѫ��������\
+����ǮƮ��˫�ۣ�ģ���������˵ĵ��ߣ�\
+�ĸ���Ը���������ϣ���һ�仨Ȧ������? ��\
+�� distance"};
 
-//看字符串大小
+//���ַ�����С
 void size(){
-    printf("这串字符的长度为%d个字符\n",sizeof(exp2));
+    printf("�⴮�ַ��ĳ���Ϊ%d���ַ�\n",sizeof(exp2));
 }
 
-//复制
-//注意要给赋复制后的字符一个足够的位置
+//����
+//ע��Ҫ�������ƺ���ַ�һ���㹻��λ��
 void _copy(){
     char get[100];
-    strcpy(exp1,get);
-    strcpy(get,"成功复制" + "\n")//字符串拼接：加号或者,
-    //strncat一样，只是加了个"\0"
+    printf("%s\n",strcpy(get,exp1));//������ 
+    strcpy(get,"�ɹ�����\n");//�ַ���ƴ��:,---------------2023/01/26:����Ҳֻ������������ 
+    //strncatһ����ֻ�Ǽ��˸�"\0"
+    printf("%s",get);
 }
 
-//比较
+//�Ƚ�
 void balance(){
     char str1[] = "FishC . com";
 
-    //strcmp 的原理是：逐字进行比较，碰到ASCII码不一样就返回-1，否则就返回1
-    if (!strcmp(str1,exp1))
+    //strcmp ��ԭ���ǣ����ֽ��бȽϣ�����ASCII�벻һ���ͷ���-1������ͷ���1
+    if (strcmp(str1,exp1) == -1)
     {
-        printf("上面的比较是：如果不一致就弹出这句话，很明显是不一致的。\n");
+        printf("����ıȽ��ǣ������һ�¾͵�����仰���������ǲ�һ�µġ�\n");
     }
-    //strncmp 同理，只是多了个参数表示只统计前几个字符
+    //strncmp ͬ����ֻ�Ƕ��˸�������ʾֻͳ��ǰ�����ַ�
 }
 
+int main(){
+	size();
+	_copy();
+	balance();
+	return 0;
+} 
