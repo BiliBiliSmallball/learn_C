@@ -26,7 +26,7 @@ void size(){
 //注意要给赋复制后的字符一个足够的位置
 void _copy(){
     char get[100];
-    printf("%s\n",strcpy(get,exp1));//有问题 
+    strcpy(get,exp1);
     strcpy(get,"成功复制\n");//字符串拼接:,---------------2023/01/26:这玩也只允许两个参数 
     //strncat一样，只是加了个"\0"
     printf("%s",get);
@@ -43,6 +43,10 @@ void balance(){
     }
     //strncmp 同理，只是多了个参数表示只统计前几个字符
 }
+
+//memchr(const void *str, int c, size_t n) 在参数 str 所指向的字符串的前 n 个字节中搜索第一次出现字符 c（一个无符号字符）的位置。
+
+
 
 int main(){
 	size();
