@@ -1,4 +1,4 @@
-=#include<stdio.h>
+#include<stdio.h>
 /*********************
 第九课：
 1.二维数组
@@ -22,6 +22,7 @@ void run(void){
 // 11,13
 //像这样
 
+//读取：利用两层循环来
 
 
 int main(){
