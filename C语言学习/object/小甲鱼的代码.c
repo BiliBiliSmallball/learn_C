@@ -1,66 +1,66 @@
-//å°ç”²é±¼ç»Ÿè®¡ä»£ç é‡çš„ç¨‹åº
+//Ğ¡¼×ÓãÍ³¼Æ´úÂëÁ¿µÄ³ÌĞò
 
 #include <io.h>
 #include <direct.h>
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <string.h>
 
-#define MAX			256
+#define MAX    256
 
 long total;
 
-int countlines(const char *filename);
+int countLines(const char *filename);
 void findAllCodes(const char *path);
-void findAllFilem(const char *path);
+void findALLFiles(const char *path);
 
-int countlines(const char *filename)
+int countLines(const char *filename)
 {
-	FILE *fp;
-	int count = 0;
-	int temp;
-	
-	if ((fp= fopen(filename,"r")) == NULL)
-	{
-		fprintf(stderr,"æ— æ³•æ‰“å¼€æ–‡ä»¶:%s\n",filename);
-		return 0;
-	}
-	
-	while((temp = fgetc(fp)) != EOF)
-	{
-		if (temp == '\n')
-		{
-			count++;
-		}
-	}
-	
-	fclose(fp);
-	
-	return count;
+        FILE *fp;
+        int count = 0;
+        int temp;
+        
+        if ((fp = fopen(filename, "r")) == NULL) 
+        {
+                fprintf(stderr, "Can not open the file£º%s\n", filename);
+                return 0;
+        }
+        
+        while ((temp = fgetc(fp)) != EOF)
+        {
+                if (temp == '\n')
+                {
+                        count++;
+                }
+        }
+        
+        fclose(fp);
+        
+        return count;
 }
 
 void findAllCodes(const char *path)
 {
-	struct _finddata_t fa;
-	long handle;
-	char thePath[MAX],targer[MAX];
-	
-	strcpy(thePath,path);
-	if((handle = _findfirst(strcat(thePath,"/*.c"),&fa)) != -1L)
-	{
-		do
-		{
-			sprintf(targer, "%s/%s", path,fa.name);
-			total += countLines(targer);		
-		}while (_findnext(handle,&fa) == 0);
-	}
-	
-	_findclose(handle);
+        struct _finddata_t fa;
+        long handle;
+        char thePath[MAX], target[MAX];
+        
+        strcpy(thePath, path);
+        if((handle = _findfirst(strcat(thePath, "/*.c"), &fa)) != -1L)
+        {
+                do
+                {
+                        sprintf(target, "%s/%s", path, fa.name);
+                        total += countLines(target);
+                }while (_findnext(handle, &fa) == 0);
+        }
+    
+        _findclose(handle);
 }
 
-void findAllDirs(const char *path)
+void findALLDirs(const char *path)
 {
-	 struct _finddata_t fa;
+        struct _finddata_t fa;
         long handle;
         char thePath[MAX];
         
@@ -70,7 +70,7 @@ void findAllDirs(const char *path)
                 fprintf(stderr, "The path %s is wrong!\n",path);
                 return;
         }
-   
+    
         do
         {        
                 if (!strcmp(fa.name, ".") || !strcmp(fa.name, ".."))
@@ -83,21 +83,21 @@ void findAllDirs(const char *path)
                         findALLDirs(thePath);
                 }
         }while (_findnext(handle, &fa) == 0);
-   
+    
         _findclose(handle);   
 }
 
 int main()
 {
-    char path[MAX] = ".";
+        char path[MAX] = "..";
         
-    printf("è®¡ç®—ä¸­...\n");
+        printf("¼ÆËãÖĞ...\n");
         
-    findAllCodes(path);
-    findAllDirs(path);
+        findAllCodes(path);
+        findALLDirs(path);
         
-    printf("ç›®å‰ä½ æ€»å…±å†™äº† %ld è¡Œä»£ç ï¼\n\n", total);
-    system("pause");
+        printf("Ä¿Ç°Äã×Ü¹²Ğ´ÁË %ld ĞĞ´úÂë£¡\n\n", total);
+        system("pause");
         
-    return 0;		
-} 
+        return 0;
+}
