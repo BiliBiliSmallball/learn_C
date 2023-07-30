@@ -1,7 +1,10 @@
 # 该仓库为电子设计大赛专用仓库
 #### 其实也是学习用的啦~
+> Note that since DEV_C++ can only read GB2312, all encoding modes in this document are GB2312, not UTF-8 (default)
+> So when opening this folder with vscode after downloading the ZIP, **remember to toggle 'encoding' to 'GB2312'.**
+
 > 注意，由于DEV_C++只能读取GB2312的关系，本文档所有的编码模式都是GB2312，而不是UTF-8（默认）
-> 所以**下载ZIP后**使用vscode打开本文件夹时，记得切换'encoding'为"GB2312"。  
+> 所以**下载ZIP后**使用vscode打开本文件夹时，记得**切换'encoding'为"GB2312"**。  
 > ![文件夹下载点图示位置](./img/下载文件夹.png)
 >>**设置步骤**
 >>1. 进入左下角，点开设置（如图）

@@ -14,7 +14,12 @@ git version : 看git版本
 查看提交的历史记录：git log --stat
 
 
-工作区回滚：git checkout <filename>
+工作区回滚：
+git reset --hard "版本号"
+git revert
+revert操作，适用于撤销某一版本，而保留该版本之后的其他版本提交。
+适用场景：例如某需求先后进行过第一、第二、第三次版本提交之后发现第二个版本有问题，需要撤销第二个版本的操作，同时保留第三次版本的提交，可使用git revert操作。
+
 撤销最后一次提交：git reset HEAD^1
 
 
