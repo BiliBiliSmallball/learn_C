@@ -1,4 +1,17 @@
 # 该仓库为电子设计大赛专用仓库
+<div align=center>
+	<img src="./img/LUCY.png"/>
+	<h1>2023 电赛兼自动化学习仓库</h1>
+	<p>
+		<a href="https://gitee.com/soul-fox/learn_c">
+			<img src="https://gitee.com/soul-fox/learn_c/badge/star.svg"/>
+		</a>
+		<img src="https://gitee.com/soul-fox/learn_cbadge/fork.svg"/>
+	</p>
+	<p>
+		<b>简体中文 | <a href="README_en.md">English</b></a>
+	</p>
+    
 #### 其实也是学习用的啦~
 > Note that since DEV_C++ can only read GB2312, all encoding modes in this document are GB2312, not UTF-8 (default)
 > So when opening this folder with vscode after downloading the ZIP, **remember to toggle 'encoding' to 'GB2312'.**
