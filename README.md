@@ -6,9 +6,6 @@
 		<a href="https://gitee.com/soul-fox/learn_c">
 			<img src="https://gitee.com/soul-fox/learn_c/badge/star.svg"/>
 		</a>
-        <a herf="https://gitee.com/soul-fox/learn_c">
-		<img src="https://gitee.com/soul-fox/learn_cbadge/fork.svg"/>
-        </a>
 	</p>
 	<p>
 		<b>¼òÌåÖÐÎÄ | <a href="README_en.md">English</b></a>
