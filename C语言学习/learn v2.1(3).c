@@ -66,7 +66,7 @@ int main(){
 	secend();
     int a,b;
     a=3,b=4;
-    a<b?printf("这是真的"):printf("这是假的")//三元运算符： 判断条件？真:假
+    a<b?printf("这是真的"):printf("这是假的");//三元运算符： 判断条件？真:假
 	system("pause");
 	return 0;
 }
