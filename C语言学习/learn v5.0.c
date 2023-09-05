@@ -12,23 +12,37 @@
 //指针是什么？
 //我们平常访问一个变量，是直接写个变量然后访问对吧，但是对于计算机来说他怎么知道呢？指针
 
-void GetValue(){
-    int a = 10;//创建一个整形变量
-    float b = 3.14;//创建一个浮点变量
-    int *p;//声明一个指针变量，且它指向的
-    
-    printf("a = %d\n",a);
-    printf("b = %f\n",b);
-    printf("p = %p\n",p);
-}
-
 //指针变量
 //指针本身也是个数据，所以就和一般的数据一样，可以挂个名字。
 //指针变量的地址里存着一般变量的地址，这个地址叫指针(很绕哈)
+#include <stdio.h>
+
+int a = 10;//创建一个整形变量
+float b = 3.14;//创建一个浮点变量
+void GetValue(){
+    int *p;//声明一个指针变量，且目前他指向空指针(特别的，如果你的指针指向的是整型变量，那么你的指针也得是整型指针)
+    
+    printf("a = %d\n",a);
+    printf("a的大小为 = %d\n",sizeof(a));
+    printf("b = %f\n",b);
+    printf("b的大小为 = %d\n",sizeof(b));
+    printf("p = %p\n",p);
+    printf("p的大小为 = %d\n",sizeof(p));
+}
+
+//取址运算符
+//如果需要获取某个变量的地址，可以使用取址运算符（&）。
+//如果需要访问指针指向的值，可以使用取值运算符（*）。
+void getting_address(){
+    int *pa = &a;
+    printf("pa = %p\n其值为：%d\n",pa,*pa);
+    printf("pa的大小为 = %d\n",sizeof(pa));
+}
 
 
 //访问方法
 int main(){
-    getting();
+    GetValue();
+    getting_address();
     return 0;
 }

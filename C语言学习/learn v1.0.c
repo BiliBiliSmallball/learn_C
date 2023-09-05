@@ -22,7 +22,7 @@ void less1(){
 
 int main()//主函数
 {
-	int a;//变量定义
+	int a,float be;//变量定义
 	be = 100;//变量表述
 	printf("我有 %f 元\n",be);//格式化输出
 	printf("你干嘛！~ 哎呦~\n");//调用printf函数输出
