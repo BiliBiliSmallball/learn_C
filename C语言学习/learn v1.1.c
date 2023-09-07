@@ -59,14 +59,11 @@ void Date_signed(){
 
 // 看结果
 int main(){
-<<<<<<< HEAD
-<<<<<<< HEAD
-    printf("%s",longger)//杩欓噷鎴戞病鏈夊湪鍑芥暟閲岄潰瀹氫箟longger锛屼絾鏄洜涓哄墠闈㈠叏灞�宸茬粡鍐欎簡
+
+    printf("%s",longger)//杩欓噷鎴戞病鏈夊湪鍑芥暟閲岄潰瀹氫箟longger锛屼絾鏄?鍥犱负鍓嶉潰鍏ㄥ眬宸茬粡鍐欎簡
 }
 cascas
-=======
-=======
->>>>>>> 8163acd7612e9c55b1b6ffc52dbf2b687b61cbca
+
     _define();//常量
     Date_signed();//数据类型
     Get_Day();//枚举类型说明
@@ -76,7 +73,3 @@ cascas
 
 //[Warning] incompatible implicit declaration of built-in function ‘scanf’ [enabled by default]
 //错误原因，未声明 #include<stdio.h> 头文件 ，就使用头文件中的 printf 函数
-<<<<<<< HEAD
->>>>>>> 8163acd7612e9c55b1b6ffc52dbf2b687b61cbca
-=======
->>>>>>> 8163acd7612e9c55b1b6ffc52dbf2b687b61cbca
