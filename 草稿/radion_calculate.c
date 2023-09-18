@@ -1,35 +1,40 @@
 #include <stdio.h>  
 
 void one(){
-	//a,b,c三个数，找出最大的数
-	int a,b,c;
-	printf("请输入三个数\n");
-	scanf("%d %d %d",&a,&b,&c);
-	
-	if(a=b=c){
-		printf("我们都一样");
-	}
-	else if (a > b)
-	{
-		printf("最大的数字是：a,值为%d",a);
-	}
-	else if (c > b)
-	{
-		printf("最大的数字是：c,值为%d",c);
+	//输入一个数，并判断该数是奇数还是偶数
+	int i;
+	printf("请输入一个数。\n");
+	scanf("%d",&i);
+	if(i%2==0){
+		printf("这是一个偶数。\n");
 	}
 	else{
-		printf("最大的数字是：b,值为%d",b);
+		printf("这是一个奇数。\n");
 	}
 }
+//
+//void two(){
+//	//输出三到100的素数
+//	for(int i=3;i<=300;i++){
+//		if (i%i == 0)
+//		{		
+//		printf("%d是一个素数",i);
+//		}
+//	}
+//}
 
-void two(){
-	//空代码
+void three(){
+	int i =1,sum=0; 
+	while(i <= 100){
+		sum = i+sum ;
+	}
+	printf("I的值为: %d",i);
 }
 
 int main(){
-	one();
+	three();
 	printf("\n————第二题————\n"); 
-	two();
+//	two();
 	system("pause");
 	return 0;
 }
