@@ -49,7 +49,7 @@ void three(){
 void four(){
 	int count = 0;
 	char ch;
-	scanf("%c",ch);
+	scanf("%c",&ch);
 	while((ch=getchar()) != '\n'){
 		count++;
 	}
