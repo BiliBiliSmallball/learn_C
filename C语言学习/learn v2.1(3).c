@@ -56,10 +56,20 @@ void secend(){
         default:
             printf("还没到5或者10哦\n");
             break;
-        }
+        } 
     } 
 }
-
+//goto [lable]
+//名称
+void test_goto(){
+    int i=1,sum;
+    loop:if (i<=100)
+    {
+        i++;
+        goto loop;
+    }
+    
+}
 
 int main(){
 	first();
