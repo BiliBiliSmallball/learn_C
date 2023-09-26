@@ -1,59 +1,29 @@
 #include <stdio.h>
 #include <math.h>
-
 void one(){
-    int number;
-    printf("请输入一个整数: ");
-    scanf("%d", &number);
-    // 判断这个数除以 2 的余数
-    if(number % 2 == 0)
-        printf("%d 是偶数。", number);
-    else
-        printf("%d 是奇数。", number);
-	printf("\n————第一题————\n");
-}
-
-void two(){
-	//输出3到100的素数
-	int i;
-	for (i = 3; i < 100; i++)
-	{
-		if (i%2 == 0)
-		{
-			continue;
-		}
-		else{
-			printf("%d\t",i);
-		}	
-	}
-	printf("\n----第二题----\n");
-}
-
-void three(){  
- //这题的思想是利用两个函数来解决这个问题  
- //第一个是用函数实现阶乘   
- int row(int i){    
-  int secend, sum = i;     
-  for(secend=1; secend < i; secend++){    
-   sum *= secend; //阶乘就是从1*2*3**。。。。n    
-  }    
-  return sum;  
- }    
-   
- int total;    
- total = row(5) + row(4) + row(3) + row(2) + row(1);    
- printf("最后的结果是：%d \n", total);    
- printf("----第三题----\n");    
-}
-
-void four(){
+	//通过格式化输入浮点数 a,b,c
+	float a,b,c,y;
+	printf("请输入a,b,c\n");
+	scanf("%f %f %f",&a,&b,&c);
 	
+	a += 1;
+	printf("%f\n",a);
+	y = 2*a + b*b + c/5;
+	
+	printf("%f\n",y);
+	if (y == 0)
+	{
+		printf("yes");
+	}
+	else
+	{
+		printf("NO");
+	}
+
 }
 
 
 int main(){
 	one();
-	two();
-	three();
 	return 0;
 }
