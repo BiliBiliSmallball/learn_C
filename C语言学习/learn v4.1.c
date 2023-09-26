@@ -52,3 +52,7 @@ int inside(int n){
     }
     return n;
 }
+
+
+//数组作为函数的参数
+//与 python的列表不同，这里
