@@ -1,45 +1,41 @@
 #include <stdio.h>  
 #include <stdlib.h>  
-#include <string.h>  
+#include <string.h>
 
-typedef struct
-{ // 学生的信息可能包括姓名、学号等。可以使用结构体（struct）来存储这些信息。
-    char name[50];
-    int id;
-}Student;
+#define MAX_NAME_LENGTH 50  
+#define MAX_STUDENTS 300
 
 int main() 
 {	
     FILE *file;
-    file = fopen("./前置条件/destination_folder/students.txt", "r");
+    file = fopen("../前置条件/destination_folder/students.txt", "r");
     if (file == NULL) {  
         printf("无法打开文件\n");  
         return 1;  
     }
-
-    
-    int num_students;  // 学生数量，需要根据实际情况确定  
-    Student *students;  
-  
-    // 动态分配内存以存储学生数据  
-    students = (Student *)malloc(num_students * sizeof(Student));//动态分配内存，以存储num_students个学生的信息。
-    if (students == NULL) {  
-        printf("内存分配失败\n");  
-        fclose(file);  
-        return 1;  
-    }
 	
-    while (fscanf(file, "%s %d", students[num_students].name, &students[num_students].id) != EOF) {//从文件中逐行读取学生的姓名和学号，并将其存储在结构体数组中。同时，递增num_students以记录学生的数量。
-    num_students++;  
-    }
-    fclose(file);
 
-    printf("读取到 %d 个学生信息：\n", num_students);
-    int i;
-    for (i=0; i < num_students; i++)
-    {
-        printf("学号：%d，姓名：%s\n", students[i].id, students[i].name);
-    }
+	char names[MAX_STUDENTS][MAX_NAME_LENGTH];  // 定义一个字符串数组用于存储名单  
+    int num_names = 0;  
+
+	fseek(file,0,SEEK_SET);
+    while (!feof(file) && num_names < MAX_STUDENTS) {  // 循环读取每一行，直到文件结束或名单已满  
+        fscanf(file, "%s", names[num_names]);  // 读取一行  
+        num_names++;
+    }  
+  
+    fclose(file);  // 关闭文件  
+  	printf("成功读取了：%d 行\n",num_names);
+	
+	// 使用当前时间作为种子来初始化随机数生成器
+	srand(time(NULL));
+	// 生成一个随机数，并对其进行取模运算，以获取在有效学生范围内的随机索引
+	int selected_student = rand() % num_names;
+	printf("\n %d",strlen(names[selected_student]));
+
+	// 输出
+	printf("抽取的学生是：%s 学号为 %d\n", names[selected_student], selected_student);
 	system("pause"); 
     return 0;
+}eturn 0;
 }
