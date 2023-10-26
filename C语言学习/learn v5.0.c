@@ -46,3 +46,4 @@ int main(){
     getting_address();
     return 0;
 }
+//*p是指针指向的对象
