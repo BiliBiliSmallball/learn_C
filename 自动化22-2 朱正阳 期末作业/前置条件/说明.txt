@@ -1,0 +1,9 @@
+该程序从exl表格中提取人名并合成一个TXT文档
+我这里取个巧，前置条件可以不一定用c对吧（qwq）
+
+将main.py中的 main()
+ 	# path = input("请输入文件路径")
+    	# ws = input("表格名")
+    	# save_address = input("请输入保存路径")
+    
+取消注释即可
