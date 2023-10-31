@@ -1,29 +1,30 @@
 #include <stdio.h>
-#include "../C语言学习/object/冒泡排序.h"
 
-//因为本单元圆的第一题是单独的一份文件，故此从tow开始打
-//求一个二维数组中最大值，最小值及其行列号。
-int tow(){
-	//创建一个测试用二维数组
-	int taggets[5][5] = {{0,15,30,45,60},{0,34,30,28,50},{0,16,30,74,460},{0,64,30,445,250},{0,254,30,255,60}};
-	
-}
-	
+// 编写程序，从键盘上输入一个八进制的数，把它转成二进制，并把结果显示出来
 
-	
+int main()
+{
+	int oct_num, bin_num;
 
+	printf("请输入一个八进制的数：");
+	scanf("%o", &oct_num);
 
-int main(){
-	int a[5] ={1,2,5,7,4};
-	int i = 0;
-	int b=a[1];
-	for (i; i <= 6; i++)
+	bin_num = oct_num;
+
+	printf("二进制表示为：");
+	while (bin_num > 0)
 	{
-		if (a[i] >= b)
-		{
-			b=a[i];
-			i++;
-		}
+		int remainder = bin_num % 2;
+		printf("%d", remainder);
+		bin_num /= 2;
 	}
-	printf("结果为：%d",b);
+	printf("\n");
+
+	return 0;
 }
+// {
+// 	int n;
+// 	printf("请输入一个八进制数：");
+// 	scanf("%o", &n);
+
+// }
